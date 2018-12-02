@@ -1,51 +1,44 @@
 const logger = require('logzio-nodejs');
 
-const removeEmpty = (context, obj) => {
-  if (typeof(obj) === 'string') {
-      return obj;
-  }
-  
-  return Object.keys(obj)
-    .filter(k => !!k)  // Remove undef, null, and empty.
-    .reduce((newObj, k) =>
-      typeof obj[k] === 'object' ?
-        Object.assign(newObj, {[k]: removeEmpty(context, obj[k])}) :  // Recurse.
-        Object.assign(newObj, {[k]: obj[k]}),  // Copy value.
-      {});
+const isArray = arr => arr instanceof Array;
+const isNil = item => item == null;
+const isEmpty = item => item === '';
+
+const removeEmptyKeys = (context, obj) => {
+    if (typeof (obj) === 'string') return obj; //for string event.
+
+    return Object.keys(obj)
+        .filter(k => !isEmpty(k))
+        .filter(k => !isNil(obj[k]))
+        .reduce((newObj, k) => {
+            context.log(k);
+            context.log(obj[k]);
+            return Object.assign(newObj, {
+                [k]: typeof obj[k] === 'object' ? removeEmptyKeys(context, obj[k]) : obj[k]
+            })
+        }, {});
 }
 
-const removeEmptyAndPush = (context, array, msg) => {
-    array.push(removeEmpty(context, msg));
-}
-
-const isArray = (obj) => { 
-    return (obj instanceof Array) 
-}
-
-const addToArray = (context, array, msg) => {
+const getParsedMsg = (context, msg) => {
     if (isArray(msg.records)) {
-        msg.records.forEach(subMsg => {
-            removeEmptyAndPush(context, array, subMsg);
+        return msg.records.map(subMsg => {
+            removeEmptyKeys(context, subMsg);
         });
-    } else {
-        removeEmptyAndPush(context, array, msg);
     }
+    return removeEmptyKeys(context, msg);
 }
 
 const parseEventHubMessagesToArray = (context, eventHubMessage) => {
-    const messages = [];
     if (isArray(eventHubMessage)) {
-        eventHubMessage.forEach(msg => {
-            addToArray(context, messages, msg);
+        return eventHubMessage.map(msg => {
+            return getParsedMsg(context, msg);
         });
-    } else {
-        addToArray(context, messages, eventHubMessage);
     }
-    return messages;
+    return [getParsedMsg(context, eventHubMessage)];
 };
 
 module.exports = function (context, eventHubMessages) {
-    context.log("Starting Logz.io Azure function")
+    context.log("Starting Logz.io Azure function. Received " + eventHubMessages.length + " logs")
     const logzioShipper = logger.createLogger({
         token: '<ACCOUNT-TOKEN>',
         type: 'eventHub',
@@ -59,6 +52,7 @@ module.exports = function (context, eventHubMessages) {
     const parseMessagesArray = parseEventHubMessagesToArray(context, eventHubMessages);
     context.log("About to send " + parseMessagesArray.length + " logs...")
     parseMessagesArray.forEach(log => {
+        context.log(log);
         logzioShipper.log(log);
     });
     logzioShipper.sendAndClose();
