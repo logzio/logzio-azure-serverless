@@ -67,7 +67,7 @@ Leave the other form fields as their default values, and then click **Create**.
 
 ### 2. Add code to the function
 
-In the _index.js_ window, replace the default code with the [Logz.io function code](lib/index.js).
+In the _index.js_ window, replace the default code with the [Logz.io function code](src/index.js).
 
 Replace `<ACCOUNT-TOKEN>` with the [token](https://app.logz.io/#/dashboard/settings/general) of the account you want to ship to.
 
