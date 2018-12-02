@@ -1,5 +1,5 @@
 # logzio-azure-serverless
-This repo contains the code and instructions you'll need to ship Azure logs to Logz.io.
+This repo contains the code and instructions you'll need to ship logs from your Azure services to Logz.io.
 At the end of this process, your Azure function will forward logs from an Azure Event Hub to your Logz.io account.
 
 ## Before you start
@@ -75,13 +75,25 @@ Replace `<LISTENER-URL>` with your region's listener URL. If your login URL is a
 
 Click **Save**.
 
-### 3. Run npm install
+### 3. Install logzio-nodejs
 
-<!-- TODO: add instructions for npm install -->
+In the bottom of the window, click **Console** to show the command line, then update npm to the latest version and install logzio-nodejs:
+
+```pwsh
+npm i -g npm
+npm install logzio-nodejs
+```
+
+The logzio-nodejs installation may take a few minutes.
+You can confirm the installation started by clicking **View files** (on the right side of the window) and finding _node_modules > logzio-nodejs_.
 
 ### 4. Test your configuration
+
+In the right of the window, click **Test** to show the test panel, and then click **Run**.
+If you experience any errors in Azure, it may be that the logzio-nodejs installation isn't complete yet.
+If you need more information on dependency management, please see [Azure Functions JavaScript developer guide](https://docs.microsoft.com/en-us/azure/azure-functions/functions-reference-node#dependency-management) from Microsoft.
 
 Give your logs some time to get from your system to ours, and then open Kibana.
 If everything went according to plan, you should see logs with the type `eventhub` in Kibana.
 
-If you still don’t see your logs, see [log shipping troubleshooting](https://docs.logz.io/user-guide/log-shipping/log-shipping-troubleshooting.html).
+If you still don’t see your logs, see [log shipping troubleshooting](https://docs.logz.io/user-guide/log-shipping/log-shipping-troubleshooting.html) in the Logz.io docs.
