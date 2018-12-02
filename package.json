@@ -1,0 +1,22 @@
+{
+  "name": "logzio-azure-serverless",
+  "version": "1.0.0",
+  "description": "This is a Logz.io Azure function that connects to eventHub",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/logzio/logzio-azure-serverless.git"
+  },
+  "author": "ido halevi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/logzio/logzio-azure-serverless/issues"
+  },
+  "homepage": "https://github.com/logzio/logzio-azure-serverless#readme",
+  "dependencies": {
+    "logzio-nodejs": "^0.4.17"
+  }
+}
