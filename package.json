@@ -4,7 +4,8 @@
   "description": "This is a Logz.io Azure function that connects to eventHub",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "watch": "jest --watch"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,7 @@
   },
   "homepage": "https://github.com/logzio/logzio-azure-serverless#readme",
   "dependencies": {
-    "logzio-nodejs": "^0.4.17"
+    "jest": "^23.6.0",
+    "logzio-nodejs": "^1.0.1"
   }
 }
