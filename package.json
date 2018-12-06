@@ -4,8 +4,7 @@
   "description": "This is a Logz.io Azure function that connects to eventHub",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
-    "watch": "jest --watch"
+    "test": "jest --watchAll"
   },
   "repository": {
     "type": "git",
