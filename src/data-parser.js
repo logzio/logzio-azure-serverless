@@ -1,11 +1,11 @@
-isArray = arr => arr instanceof Array;
-isEmptyArray = arr => isArray(arr) ? arr.length === 0 : false;
-isNil = item => item == null || item === 'null' || item === 'undefined';
-isEmpty = item => item === '';
+const isArray = arr => arr instanceof Array;
+const isEmptyArray = arr => isArray(arr) ? arr.length === 0 : false;
+const isNil = item => item == null || item === 'null' || item === 'undefined';
+const isEmpty = item => item === '';
 
 class DataParser {
     constructor({
-        internalLogger = console
+        internalLogger = globle.console
     }) {
         this.internalLogger = internalLogger;
     }
