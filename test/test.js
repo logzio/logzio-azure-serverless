@@ -1,5 +1,4 @@
 const DataParser = require('../src/data-parser');
-const assert = require('assert');
 
 const context = {
     log: (a) => {
