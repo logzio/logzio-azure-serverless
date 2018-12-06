@@ -6,7 +6,7 @@ module.exports = function processEventHubMessages(context, eventHubMessages) {
     const logzioShipper = logger.createLogger({
         token: '<ACCOUNT-TOKEN>',
         type: 'eventHub',
-        // host: '<LISTENER-URL>',
+        host: '<LISTENER-URL>',
         protocol: 'https',
         internalLogger: context,
         compress: true,
