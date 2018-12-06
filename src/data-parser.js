@@ -5,7 +5,7 @@ const isEmpty = item => item === '';
 
 class DataParser {
     constructor({
-        internalLogger = globle.console
+        internalLogger = global.console
     }) {
         this.internalLogger = internalLogger;
     }

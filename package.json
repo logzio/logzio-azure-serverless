@@ -4,6 +4,7 @@
   "description": "This is a Logz.io Azure function that connects to eventHub",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint",
     "test": "jest --watchAll"
   },
   "repository": {
@@ -17,7 +18,13 @@
   },
   "homepage": "https://github.com/logzio/logzio-azure-serverless#readme",
   "dependencies": {
+    "acorn": "^6.0.4",
     "jest": "^23.6.0",
     "logzio-nodejs": "^1.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^5.9.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0"
   }
 }
