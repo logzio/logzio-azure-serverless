@@ -1,13 +1,11 @@
 {
-  "bindings": [
-    {
-      "type": "eventHubTrigger",
-      "name": "eventHubMessages",
-      "direction": "in",
-      "eventHubName": "samples-workitems",
-      "connection": "<YOUR_CONNECTION_STRING>",
-      "cardinality": "many",
-      "consumerGroup": "$Default"
-    }
-  ]
+  "bindings": [{
+    "type": "eventHubTrigger",
+    "name": "eventHubMessages",
+    "direction": "in",
+    "eventHubName": "samples-workitems",
+    "connection": "<YOUR_CONNECTION_STRING>",
+    "cardinality": "many",
+    "consumerGroup": "$Default"
+  }]
 }
