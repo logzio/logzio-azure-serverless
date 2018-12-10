@@ -81,7 +81,25 @@ In the _View files_ panel, click **Add** to add a new file. Name this file `data
 
 Open _data-parser.js_, paste the code from [data-parser.js](src/data-parser.js) in logzio-azure-serverless, and click **Save**.
 
-### 5. Install logzio-nodejs
+### 5. _(Optional)_ Add failsafe for log shipping timeouts
+
+If the connection to Logz.io times out, you can configure logzio-azure-serverless to back up logs to Azure Blob Storage as a failsafe to prevent dropped logs.
+
+![Function app left menu](img/function-app-menu-integrate.png)
+
+To do this, expand your function app's left menu, and then click **Integrate**.
+
+![New Blob output](img/new-output.png)
+
+In the top of the triggers panel, click **New Output**, select **Azure Blob Storage**, and then click **Select**.
+The _Azure Blob Storage output_ settings are displayed.
+
+Leave **Blob parameter name** as "outputBlob".
+Enter the **Path** and **Storage account connection** information for the Azure Blob you're sending dropped logs to, and then click **Save**.
+
+**Note:** For more information on Azure Blob output binding, see [Azure Blob storage bindings for Azure Functions > Output](https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-storage-blob#output) from Microsoft.
+
+### 6. Install logzio-nodejs
 
 In the bottom of the window, click **Console** to show the command line, then update npm to the latest version and install logzio-nodejs:
 
@@ -93,7 +111,7 @@ npm install logzio-nodejs
 The logzio-nodejs installation may take a few minutes.
 You can confirm the installation started by clicking **View files** (on the right side of the window) and finding _node_modules > logzio-nodejs_.
 
-### 6. Test your configuration
+### 7. Test your configuration
 
 In the right of the window, click **Test** to show the test panel, and then click **Run**.
 If you experience any errors in Azure, it may be that the logzio-nodejs installation isn't complete yet.
