@@ -65,7 +65,7 @@ Click **Select** to return to the _New Function_ panel.
 
 Leave the other form fields as their default values, and then click **Create**.
 
-### 2. Set up index.js
+### 3. Set up index.js
 
 In the _index.js_ file, replace the default code with the code from [index.js](src/index.js) in logzio-azure-serverless.
 
@@ -75,13 +75,13 @@ Replace `<LISTENER-URL>` with your region's listener URL. If your login URL is a
 
 Click **Save**.
 
-### 3. Set up data-parser.js
+### 4. Set up data-parser.js
 
 In the _View files_ panel, click **Add** to add a new file. Name this file `data-parser.js`.
 
 Open _data-parser.js_, paste the code from [data-parser.js](src/data-parser.js) in logzio-azure-serverless, and click **Save**.
 
-### 4. Install logzio-nodejs
+### 5. Install logzio-nodejs
 
 In the bottom of the window, click **Console** to show the command line, then update npm to the latest version and install logzio-nodejs:
 
@@ -93,7 +93,7 @@ npm install logzio-nodejs
 The logzio-nodejs installation may take a few minutes.
 You can confirm the installation started by clicking **View files** (on the right side of the window) and finding _node_modules > logzio-nodejs_.
 
-### 5. Test your configuration
+### 6. Test your configuration
 
 In the right of the window, click **Test** to show the test panel, and then click **Run**.
 If you experience any errors in Azure, it may be that the logzio-nodejs installation isn't complete yet.
