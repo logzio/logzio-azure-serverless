@@ -109,13 +109,17 @@ npm install logzio-nodejs
 ```
 
 The logzio-nodejs installation may take a few minutes.
-You can confirm the installation started by clicking **View files** (on the right side of the window) and finding _node_modules > logzio-nodejs_.
+You can confirm the installation is done by clicking **View files** (on the right side of the window) and finding _node_modules > logzio-nodejs_.
 
 ### 7. Test your configuration
 
-In the right of the window, click **Test** to show the test panel, and then click **Run**.
-If you experience any errors in Azure, it may be that the logzio-nodejs installation isn't complete yet.
-If you need more information on dependency management, please see [Azure Functions JavaScript developer guide](https://docs.microsoft.com/en-us/azure/azure-functions/functions-reference-node#dependency-management) from Microsoft.
+In the right of the window, click **Test** to show the _Test_ panel, and then click **Run**.
+
+If you experience any errors in Azure, it may be that the logzio-nodejs wasn't fully loaded by the app.
+You can fix this by clicking your app in the function app's left menu and then clicking **Restart** in the _Overview_ tab.
+After the function app restarts, run the test another time by click **Run** in the _Test_ panel.
+
+**Note**: If you need more information on dependency management, see [Azure Functions JavaScript developer guide](https://docs.microsoft.com/en-us/azure/azure-functions/functions-reference-node#dependency-management) from Microsoft.
 
 Give your logs some time to get from your system to ours, and then open Kibana.
 If everything went according to plan, you should see logs with the type `eventhub` in Kibana.
