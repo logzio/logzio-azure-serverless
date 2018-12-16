@@ -38,4 +38,11 @@ describe('Azure eventHub function', () => {
     const parseMessagesArray = dataParser.parseEventHubLogMessagesToArray(eventHubMessages);
     expect(parseMessagesArray).toMatchObject(eventHubMessages[0].records);
   });
+
+  it('activityLogs', () => {
+    const eventHubMessages = [testLogs.activityLogs];
+    const dataParser = new DataParser(context);
+    const parseMessagesArray = dataParser.parseEventHubLogMessagesToArray(eventHubMessages);
+    expect(parseMessagesArray.length).toBe(6);
+  });
 });
