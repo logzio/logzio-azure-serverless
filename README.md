@@ -12,7 +12,18 @@ You'll need:
 * Logs streaming from your Azure services to the Event Hub
   ([instructions](https://docs.microsoft.com/en-us/azure/monitoring-and-diagnostics/monitor-stream-monitoring-data-event-hubs))
 
-In step 1 of the setup, you'll need the Event Hub name, resource group, and region—so keep this information handy!
+#### Best Practices ####
+Make sure that you apply best practices for creating and using event hubs:
+* Set up shared Access Policies for the each event hub,and not only for the their namespace
+* For each event hub,create a new consumer group called **logzio-consumer-group**,to be used by the logzio Azure function
+
+#### insights-operational-logs ####
+This event hub is automatically generated when you choose to export events from By Azure Monitor to the event hub.
+For eae of use,we will use this event hub name,but same actions should be used for any event hub you use.
+Same actions should be used for any event hub you use.
+
+
+In step 1 of the setup, you'll need the resource group and region—so keep this information handy!
 
 ## Setting log shipping from Azure
 
@@ -59,11 +70,13 @@ The _New Function_ panel opens.
 
 ![New Function panel](img/new-function-panel.png)
 
-Above the **Event Hub connection** list, click **new**.
-In the _Connection_ dialog box, select the **Event Hub** tab, then set the options for the Event Hub you'll collect logs from.
+Make sure you set the following fields:
+* In the _Connection_ dialog box, select the **Event Hub** tab, then set the options for the insights-operational-logs Event Hub.Choose the event hub shared access policy,as mentioned in the best practices section
 Click **Select** to return to the _New Function_ panel.
+* In the consumer group section, set **logzio-consumer-group**,as mentioned in the best practices section 
+* In the event hub section, set **insights-operational-logs** 
 
-Leave the other form fields as their default values, and then click **Create**.
+Next click **Create**.
 
 ### 3. Set up index.js
 
