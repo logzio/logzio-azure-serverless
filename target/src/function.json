@@ -1,0 +1,20 @@
+{
+  "disabled": false,
+  "bindings": [{
+      "type": "eventHubTrigger",
+      "name": "eventHubMessages",
+      "direction": "in",
+      "eventHubName": "insights-operational-logs",
+      "connection": "<YOUR_CONNECTION_STRING>",
+      "cardinality": "many",
+      "consumerGroup": "$Default"
+    },
+    {
+      "type": "blob",
+      "name": "outputBlob",
+      "path": "logzio-failed-logs/{rand-guid}",
+      "connection": "<YOUR_STORAGE_CONNECTION_STRING>",
+      "direction": "out"
+    }
+  ]
+}
