@@ -1,9 +1,10 @@
 {
+  "disabled": false,
   "bindings": [{
       "type": "eventHubTrigger",
       "name": "eventHubMessages",
       "direction": "in",
-      "eventHubName": "samples-workitems",
+      "eventHubName": "insights-operational-logs",
       "connection": "<YOUR_CONNECTION_STRING>",
       "cardinality": "many",
       "consumerGroup": "$Default"
