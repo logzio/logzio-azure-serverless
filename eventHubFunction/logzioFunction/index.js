@@ -16,9 +16,9 @@ module.exports = function processEventHubMessages(context, eventHubMessages) {
 
   const callBackFunction = getCallBackFunction(context);
   const logzioShipper = logger.createLogger({
-    token: '<ACCOUNT-TOKEN>',
+    token: process.env.LogzioToken,
     type: 'eventHub',
-    host: '<LISTENER-URL>',
+    host: process.env.LogzioHost,
     protocol: 'https',
     internalLogger: context,
     compress: true,

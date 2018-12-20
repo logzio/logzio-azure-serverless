@@ -6,6 +6,6 @@
         "batchCheckpointFrequency": 1
     },
     "functions": [
-        "src"
+        "logzioFunction"
     ]
 }
