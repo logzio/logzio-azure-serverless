@@ -5,7 +5,7 @@
       "name": "eventHubMessages",
       "direction": "in",
       "eventHubName": "insights-operational-logs",
-      "connection": "<YOUR_CONNECTION_STRING>",
+      "connection": "AzureEventHubConnectionString",
       "cardinality": "many",
       "consumerGroup": "$Default"
     },
@@ -13,7 +13,7 @@
       "type": "blob",
       "name": "outputBlob",
       "path": "logzio-failed-logs/{rand-guid}",
-      "connection": "<YOUR_STORAGE_CONNECTION_STRING>",
+      "connection": "StorageConnectionString",
       "direction": "out"
     }
   ]
