@@ -1,6 +1,6 @@
 const testLogs = require('./test-logs');
 
-const DataParser = require('../src/data-parser');
+const DataParser = require('../eventHubFunction/logzioFunction/data-parser');
 
 const context = {
   log: (a) => {

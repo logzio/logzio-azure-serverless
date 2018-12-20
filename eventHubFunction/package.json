@@ -1,0 +1,24 @@
+{
+  "name": "eventhubfunction",
+  "version": "1.0.0",
+  "description": "This is an Azure function that collects logs from azure resources and ship them to Logz.io",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/logzio/logzio-azure-serverless.git"
+  },
+  "author": "ido halevi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/logzio/logzio-azure-serverless/issues"
+  },
+  "homepage": "https://github.com/logzio/logzio-azure-serverless#readme",
+  "devDependencies": {
+    "eslint": "^5.10.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0"
+  }
+}
