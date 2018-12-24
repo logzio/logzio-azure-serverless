@@ -4,15 +4,17 @@ At the end of this process, your Azure function will forward logs from an Azure 
 
 ## Before you start
 
-To get everything up and running, you'll need to have these things ready before you start:
+To get everything up and running, you'll need:
 
-You'll need:
-* An Event Hub that will receive logs
-  ([instructions](https://docs.microsoft.com/en-us/azure/event-hubs/))
-* Logs streaming from your Azure services to the Event Hub
-  ([instructions](https://docs.microsoft.com/en-us/azure/monitoring-and-diagnostics/monitor-stream-monitoring-data-event-hubs))
+* An event hub that will receive logs
+  ([instructions](https://docs.microsoft.com/en-us/azure/event-hubs/event-hubs-create)). Name this event hub "insights-operational-logs" (this is the default name used by Azure Monitor).
+* A shared access policy for the insights-operational-logs event hub.
+  This shared access policy should have **Manage** access and should be called "logging-policy".
+* A new consumer group in the insights-operational-logs event hub called "logzio-consumer-group".
+* Logs streaming from your Azure services to the insights-operational-logs event hub
+  ([instructions](https://docs.microsoft.com/en-us/azure/monitoring-and-diagnostics/monitor-stream-monitoring-data-event-hubs)).
 
-In step 1 of the setup, you'll need the Event Hub name, resource group, and region—so keep this information handy!
+In step 1 of the setup, you'll need the resource group and region—so keep this information handy!
 
 ## Setting log shipping from Azure
 
@@ -59,11 +61,15 @@ The _New Function_ panel opens.
 
 ![New Function panel](img/new-function-panel.png)
 
-Above the **Event Hub connection** list, click **new**.
-In the _Connection_ dialog box, select the **Event Hub** tab, then set the options for the Event Hub you'll collect logs from.
-Click **Select** to return to the _New Function_ panel.
+Above the **Event Hub connection** list, click **new**. 
+In the _Connection_ dialog box, select the **Event Hub** tab, then set the options for the insights-operational-logs Event Hub.
+Click **Select** to return to the New Function panel.
 
-Leave the other form fields as their default values, and then click **Create**.
+In the **Event Hub consumer group** box, type "logzio-consumer-group".
+
+In the **Event Hub name** box, type "insights-operational-logs".
+
+Click **Create**.
 
 ### 3. Set up index.js
 
