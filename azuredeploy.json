@@ -184,7 +184,7 @@
                         },
                         {
                             "name": "AzureEventHubConnectionString",
-                            "value": "[listkeys(resourceId('Microsoft.EventHub/insights-operational-logs/authorizationRules', parameters('namespaces_LogzioNS_name'),parameters('AuthorizationRules_LogzioSharedAccessKey_name')), '2017-04-01').primaryConnectionString]"
+                            "value": "[listkeys(resourceId('Microsoft.EventHub/namespaces/authorizationRules', parameters('namespaces_LogzioNS_name'),parameters('AuthorizationRules_LogzioSharedAccessKey_name')), '2017-04-01').primaryConnectionString]"
                         },
                         {
                             "name": "StorageConnectionString",
@@ -217,7 +217,7 @@
             ]
         },
         {
-            "type": "Microsoft.EventHub/namespaces/eventhubs/authorizationRules",
+            "type": "Microsoft.EventHub/namespaces/AuthorizationRules",
             "name": "[concat(parameters('namespaces_LogzioNS_name'), '/', parameters('AuthorizationRules_LogzioSharedAccessKey_name'))]",
             "apiVersion": "2017-04-01",
             "location": "[resourceGroup().location]",
