@@ -14,8 +14,6 @@ To get everything up and running, you'll need:
 * Logs streaming from your Azure services to the insights-operational-logs event hub
   ([instructions](https://docs.microsoft.com/en-us/azure/monitoring-and-diagnostics/monitor-stream-monitoring-data-event-hubs)).
 
-You'll need the region—so keep this information handy!
-
 ## Setting log shipping from Azure
 
 ### 1. Deploy a custom template
@@ -33,17 +31,17 @@ Replace it with the code from [logzio-azure-serverless](https://raw.githubuserco
 
 ![Customized template](img/customized-template-step-2.png)
 
-In the **BASICS** section:
+Make sure to use these settings:
+
+**In the BASICS section**
 * **Resource group**: Click **Create new**. <br />
   Type the **Name** "logzioEventHubIntegration", and then click **OK**.
-* **Location**: Choose the same region as the Event Hub you'll collect logs from.
 
-In the **SETTINGS** section:
+**In the SETTINGS section:**
 * **Logzio Host**: Use your Logz.io region's listener URL.
   If your login URL is app.logz.io, use `listener.logz.io` (this is the default setting).
   If your login URL is app-eu.logz.io, use `listener-eu.logz.io`.
 * **Logzio Token**: Use the [token](https://app.logz.io/#/dashboard/settings/general) of the account you want to ship to.
-* **Authorization Rules_Root Manage Shared Access Key_name**: Set to "logging-policy", as discussed in Before You Start (above).
 * **Consumergroups_$Default_name**: Set to "logzio-consumer-group".
 
 At the bottom of the page, select **I agree to the terms and conditions stated above**, and then click **Purchase**.
@@ -54,7 +52,7 @@ Deployment can take a few minutes.
 ### 3. _(Optional)_ Add failsafe for log shipping timeouts
 
 You can configure logzio-azure-serverless to back up logs to Azure Blob Storage.
-This prevents dropped logs if the connection to Logz.io times out.
+So if the connection to Logz.io times out, you'll still have a backup of any dropped logs.
 
 ![Function app left menu](img/function-app-menu-integrate.png)
 
