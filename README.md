@@ -8,8 +8,6 @@ To get everything up and running, you'll need:
 
 * An event hub that will receive logs
   ([instructions](https://docs.microsoft.com/en-us/azure/event-hubs/event-hubs-create)). Name this event hub "insights-operational-logs" (this is the default name used by Azure Monitor).
-* A shared access policy for the insights-operational-logs event hub.
-  This shared access policy should have **Manage** access and should be called "logging-policy".
 * A new consumer group in the insights-operational-logs event hub called "logzio-consumer-group".
 * Logs streaming from your Azure services to the insights-operational-logs event hub
   ([instructions](https://docs.microsoft.com/en-us/azure/monitoring-and-diagnostics/monitor-stream-monitoring-data-event-hubs)).
