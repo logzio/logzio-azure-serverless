@@ -31,15 +31,14 @@ Make sure to use these settings:
   If your login URL is app-eu.logz.io, use `listener-eu.logz.io`.
 * **Logzio Token**: Use the [token](https://app.logz.io/#/dashboard/settings/general) of the account you want to ship to.
 
-At the bottom of the page, select **I agree to the terms and conditions stated above**, and then click **Purchase**.
+At the bottom of the page, select **I agree to the terms and conditions stated above**, and then click **Purchase** to deploy.
 
-The new function app will deploy.
 Deployment can take a few minutes.
 
 ### 3. _(Optional)_ Add failsafe for log shipping timeouts
 
 You can configure logzio-azure-serverless to back up logs to Azure Blob Storage.
-So if the connection to Logz.io times out, you'll still have a backup of any dropped logs.
+So if the connection to Logz.io times out or an error occurs, you'll still have a backup of any dropped logs.
 
 ![Function app left menu](img/function-app-menu-integrate.png)
 
