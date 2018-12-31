@@ -2,16 +2,6 @@
 This repo contains the code and instructions you'll need to ship logs from your Azure services to Logz.io.
 At the end of this process, your Azure function will forward logs from an Azure Event Hub to your Logz.io account.
 
-## Before you start
-
-To get everything up and running, you'll need:
-
-* An event hub that will receive logs
-  ([instructions](https://docs.microsoft.com/en-us/azure/event-hubs/event-hubs-create)). Name this event hub "insights-operational-logs" (this is the default name used by Azure Monitor).
-* A new consumer group in the insights-operational-logs event hub called "logzio-consumer-group".
-* Logs streaming from your Azure services to the insights-operational-logs event hub
-  ([instructions](https://docs.microsoft.com/en-us/azure/monitoring-and-diagnostics/monitor-stream-monitoring-data-event-hubs)).
-
 ## Setting log shipping from Azure
 
 ### 1. Deploy a custom template
@@ -33,14 +23,13 @@ Make sure to use these settings:
 
 **In the BASICS section**
 * **Resource group**: Click **Create new**. <br />
-  Type the **Name** "logzioEventHubIntegration", and then click **OK**.
+  Give a meaningful **Name**, such as "logzioEventHubIntegration", and then click **OK**.
 
 **In the SETTINGS section:**
 * **Logzio Host**: Use your Logz.io region's listener URL.
   If your login URL is app.logz.io, use `listener.logz.io` (this is the default setting).
   If your login URL is app-eu.logz.io, use `listener-eu.logz.io`.
 * **Logzio Token**: Use the [token](https://app.logz.io/#/dashboard/settings/general) of the account you want to ship to.
-* **Consumergroups_$Default_name**: Set to "logzio-consumer-group".
 
 At the bottom of the page, select **I agree to the terms and conditions stated above**, and then click **Purchase**.
 
@@ -68,15 +57,12 @@ Enter the blob **Path** for the Azure blob you're sending dropped logs to, and t
 
 **Note:** For more information on Azure Blob output binding, see [Azure Blob storage bindings for Azure Functions > Output](https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-storage-blob#output) from Microsoft.
 
-### 4. Test your configuration
+### 4. Stream Azure service logs to your new event hub
 
-In the right of the window, click **Test** to show the _Test_ panel, and then click **Run**.
+Now that you've set it up, configure Azure to stream service logs to your new event hub so that your new function app can forward those logs to Logz.io.
+If you're not sure how to do this, see [Stream Azure monitoring data to an event hub for consumption by an external tool](https://docs.microsoft.com/en-us/azure/monitoring-and-diagnostics/monitor-stream-monitoring-data-event-hubs) from Microsoft.
 
-If you experience any errors in Azure, it may be that the logzio-nodejs wasn't fully loaded by the app.
-You can fix this by clicking your app in the function app's left menu and then clicking **Restart** in the _Overview_ tab.
-After the function app restarts, run the test another time by click **Run** in the _Test_ panel.
-
-**Note**: If you need more information on dependency management, see [Azure Functions JavaScript developer guide](https://docs.microsoft.com/en-us/azure/azure-functions/functions-reference-node#dependency-management) from Microsoft.
+### 5. Test your configuration
 
 Give your logs some time to get from your system to ours, and then open Kibana.
 If everything went according to plan, you should see logs with the type `eventhub` in Kibana.
