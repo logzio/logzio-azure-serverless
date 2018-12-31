@@ -4,10 +4,10 @@
       "type": "eventHubTrigger",
       "name": "eventHubMessages",
       "direction": "in",
-      "eventHubName": "insights-operational-logs",
+      "path": "insights-operational-logs",
       "connection": "AzureEventHubConnectionString",
       "cardinality": "many",
-      "consumerGroup": "$Default"
+      "consumerGroup": "LogzioConsumerGroup"
     },
     {
       "type": "blob",
