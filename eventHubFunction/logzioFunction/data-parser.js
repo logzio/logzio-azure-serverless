@@ -1,15 +1,10 @@
 const isArray = arr => arr instanceof Array;
 const isEmptyArray = arr => (isArray(arr) ? arr.length === 0 : false);
-const isNil = item => item === null || item === 'null' || item === 'undefined';
+const isNil = item => item == null || item === 'null' || item === 'undefined';
 const isEmpty = item => item === '';
-const isEmptyObj = (obj) => {
-  for (var key in obj) {
-    if (obj.hasOwnProperty(key))
-      return false;
-  }
-  return true;
-}
-const filterAllEmpty = (k, v) => !isEmpty(k) && !isNil(k) && !isEmpty(v) && !isNil(v) && !isEmptyArray(v) && !isEmptyObj(v);
+const isEmptyObj = obj => (typeof obj === 'object' ? Object.keys(obj).length === 0 : false);
+const filterAllEmpty = (k, v) => !isEmpty(k) && !isNil(k) && !isEmpty(v)
+  && !isNil(v) && !isEmptyArray(v) && !isEmptyObj(v);
 
 class DataParser {
   constructor({
