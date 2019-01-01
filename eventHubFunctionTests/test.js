@@ -30,12 +30,14 @@ describe('Azure eventHub function', () => {
     expect(parseMessagesArray).not.toHaveProperty('properties.initiatedBy.user.displayName');
     expect(parseMessagesArray).not.toHaveProperty('properties.targetResources.displayName');
     expect(parseMessagesArray).not.toHaveProperty('properties.additionalDetails');
+    expect(parseMessagesArray).not.toHaveProperty('time');
   });
 
   it('NetworkSecurityGroupRuleCounter logs', () => {
     const eventHubMessages = [testLogs.networkSecurityGroupRuleCounterLogs];
     const dataParser = new DataParser(context);
     const parseMessagesArray = dataParser.parseEventHubLogMessagesToArray(eventHubMessages);
+    expect(parseMessagesArray).not.toHaveProperty('time');
     expect(parseMessagesArray).toMatchObject(eventHubMessages[0].records);
   });
 });

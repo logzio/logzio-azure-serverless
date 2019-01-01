@@ -5,6 +5,13 @@ const isEmpty = item => item === '';
 const isEmptyObj = obj => (typeof obj === 'object' ? Object.keys(obj).length === 0 : false);
 const filterAllEmpty = (k, v) => !isEmpty(k) && !isNil(k) && !isEmpty(v)
   && !isNil(v) && !isEmptyArray(v) && !isEmptyObj(v);
+const renameKey = (obj) => {
+  if (obj.hasOwnProperty) {
+    delete Object.assign(obj, {
+      '@timestamp': obj.time,
+    }).time;
+  }
+};
 
 class DataParser {
   constructor({
@@ -23,11 +30,16 @@ class DataParser {
       }), {});
   }
 
+  renameKeyRemoveEmpty(obj) {
+    renameKey(obj);
+    return this.removeEmpty(obj);
+  }
+
   pushParsedMsg(parsedMessages, msg) {
     if (isArray(msg.records)) {
-      msg.records.forEach(subMsg => parsedMessages.push(this.removeEmpty(subMsg)));
+      msg.records.forEach(subMsg => parsedMessages.push(this.renameKeyRemoveEmpty(subMsg)));
     } else {
-      parsedMessages.push(this.removeEmpty(msg));
+      parsedMessages.push(this.renameKeyRemoveEmpty(msg));
     }
   }
 

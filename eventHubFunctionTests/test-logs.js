@@ -72,7 +72,7 @@ const networkSecurityGroupRuleCounterLogs = {
       ruleName: 'DefaultRule_AllowVnetOutBound',
       direction: 'Out',
       type: 'allow',
-      matchedConnections: 0,
+      matchedConnections: 1,
     },
   },
   {
