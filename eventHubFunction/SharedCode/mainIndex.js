@@ -11,9 +11,8 @@ function getCallBackFunction(context) {
   };
 }
 
-module.exports = function processEventHubMessages(context, eventHubMessages) {
+module.exports = function processEventHubMessages(context, eventHubMessages, enableMetrics) {
   context.log('Starting Logz.io Azure function.');
-
   const callBackFunction = getCallBackFunction(context);
   const logzioShipper = logger.createLogger({
     token: process.env.LogzioToken,
@@ -26,7 +25,7 @@ module.exports = function processEventHubMessages(context, eventHubMessages) {
     callback: callBackFunction,
   });
 
-  const dataParser = new DataParser(context);
+  const dataParser = new DataParser(context, enableMetrics);
   const parseMessagesArray = dataParser.parseEventHubLogMessagesToArray(eventHubMessages);
   context.log(`About to send ${parseMessagesArray.length} logs...`);
 
