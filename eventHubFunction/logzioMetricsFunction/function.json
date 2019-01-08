@@ -1,0 +1,20 @@
+{
+  "disabled": false,
+  "bindings": [{
+      "type": "eventHubTrigger",
+      "name": "eventHubMessages",
+      "direction": "in",
+      "path": "insights-logzio-metrics",
+      "connection": "AzureEventHubConnectionString",
+      "cardinality": "many",
+      "consumerGroup": "LogzioConsumerGroup"
+    },
+    {
+      "type": "blob",
+      "name": "outputBlob",
+      "path": "logzio-failed-metrics/{rand-guid}",
+      "connection": "StorageConnectionString",
+      "direction": "out"
+    }
+  ]
+}
