@@ -15,9 +15,9 @@ module.exports = function processEventHubMessages(context, eventHubMessages, ena
   context.log('Starting Logz.io Azure function.');
   const callBackFunction = getCallBackFunction(context);
   const logzioShipper = logger.createLogger({
-    token: process.env.LogzioToken,
+    token: enableMetrics ? process.env.LogzioMetricsToken : process.env.LogzioLogsToken,
     type: 'eventHub',
-    host: process.env.LogzioHost,
+    host: enableMetrics ? process.env.LogzioMetricsHost : process.env.LogzioLogsHost,
     protocol: 'https',
     internalLogger: context,
     compress: true,
