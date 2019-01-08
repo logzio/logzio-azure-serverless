@@ -2,12 +2,20 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "sites_logzioFunctionApp_name": {
-            "defaultValue": "[concat('logzioFunctionApp', uniqueString(resourceGroup().id))]",
+        "sites_logzioLogsFunctionApp_name": {
+            "defaultValue": "[concat('logzioLogsFunctionApp', uniqueString(resourceGroup().id))]",
             "type": "String"
         },
-        "storageAccounts_LogzioFailSafe_name": {
-            "defaultValue": "[concat('logziofs',uniqueString(resourceGroup().id))]",
+        "sites_logzioMetricsFunctionApp_name": {
+            "defaultValue": "[concat('sites_logzioMetricsFunctionApp_name', uniqueString(resourceGroup().id))]",
+            "type": "String"
+        },
+        "storageAccounts_LogzioLogsFailSafe_name": {
+            "defaultValue": "[concat('logziolfs',uniqueString(resourceGroup().id))]",
+            "type": "String"
+        },
+        "storageAccounts_LogzioMetricsFailSafe_name": {
+            "defaultValue": "[concat('logziomfs',uniqueString(resourceGroup().id))]",
             "type": "String"
         },
         "namespaces_LogzioNS_name": {
@@ -18,20 +26,36 @@
             "defaultValue": "[concat('logzioAppServicePlan', uniqueString(resourceGroup().id))]",
             "type": "String"
         },
-        "storageAccounts_LogzioAppStorage_name": {
+        "storageAccounts_LogzioLogsAppStorage_name": {
             "defaultValue": "[concat('logzapplogs', uniqueString(resourceGroup().id))]",
+            "type": "String"
+        },
+        "storageAccounts_LogzioMetrcisAppStorage_name": {
+            "defaultValue": "[concat('logzappmetrics', uniqueString(resourceGroup().id))]",
             "type": "String"
         },
         "eventhubs_insights_operational_logs_name": {
             "defaultValue": "insights-operational-logs",
             "type": "String"
         },
-        "AuthorizationRules_LogzioSharedAccessKey_name": {
-            "defaultValue": "LogzioSharedAccessKey",
+        "eventhubs_insights_operational_metrics_name": {
+            "defaultValue": "insights-operational-metrics",
             "type": "String"
         },
-        "consumergroups_$Default_name": {
-            "defaultValue": "LogzioConsumerGroup",
+        "AuthorizationRules_LogzioLogsSharedAccessKey_name": {
+            "defaultValue": "LogzioLogsSharedAccessKey",
+            "type": "String"
+        },
+        "AuthorizationRules_LogzioMetricsSharedAccessKey_name": {
+            "defaultValue": "LogzioMetricsSharedAccessKey",
+            "type": "String"
+        },
+        "consumergroups_$Default_logs_name": {
+            "defaultValue": "LogzioLogsConsumerGroup",
+            "type": "String"
+        },
+        "consumergroups_$Default_metrics_name": {
+            "defaultValue": "LogzioMetricsConsumerGroup",
             "type": "String"
         },
         "repoURL": {
@@ -42,12 +66,20 @@
             "defaultValue": "master",
             "type": "String"
         },
-        "LogzioHost": {
+        "LogzioLogsHost": {
             "defaultValue": "listener.logz.io",
             "type": "String"
         },
-        "LogzioToken": {
-            "defaultValue": "Your Logzio account token",
+        "LogzioMetricsHost": {
+            "defaultValue": "listener.logz.io",
+            "type": "String"
+        },
+        "LogzioLogsToken": {
+            "defaultValue": "Your Logzio logs account token",
+            "type": "String"
+        },
+        "LogzioMetricsToken": {
+            "defaultValue": "Your Logzio metrics account token",
             "type": "String"
         }
     },
@@ -78,7 +110,34 @@
                 "tier": "Standard"
             },
             "kind": "Storage",
-            "name": "[parameters('storageAccounts_LogzioFailSafe_name')]",
+            "name": "[parameters('storageAccounts_LogzioLogsFailSafe_name')]",
+            "apiVersion": "2017-06-01",
+            "location": "[resourceGroup().location]",
+            "scale": null,
+            "properties": {
+                "supportsHttpsTrafficOnly": false,
+                "encryption": {
+                    "services": {
+                        "file": {
+                            "enabled": true
+                        },
+                        "blob": {
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                }
+            },
+            "dependsOn": []
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "sku": {
+                "name": "Standard_RAGRS",
+                "tier": "Standard"
+            },
+            "kind": "Storage",
+            "name": "[parameters('storageAccounts_LogzioMetricsFailSafe_name')]",
             "apiVersion": "2017-06-01",
             "location": "[resourceGroup().location]",
             "scale": null,
@@ -105,7 +164,33 @@
                 "tier": "Standard"
             },
             "kind": "Storage",
-            "name": "[parameters('storageAccounts_LogzioAppStorage_name')]",
+            "name": "[parameters('storageAccounts_LogzioLogsAppStorage_name')]",
+            "apiVersion": "2017-06-01",
+            "location": "[resourceGroup().location]",
+            "scale": null,
+            "properties": {
+                "encryption": {
+                    "services": {
+                        "file": {
+                            "enabled": true
+                        },
+                        "blob": {
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                }
+            },
+            "dependsOn": []
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "Storage",
+            "name": "[parameters('storageAccounts_LogzioMetricsAppStorage_name')]",
             "apiVersion": "2017-06-01",
             "location": "[resourceGroup().location]",
             "scale": null,
@@ -153,7 +238,7 @@
         {
             "type": "Microsoft.Web/sites",
             "kind": "functionapp",
-            "name": "[parameters('sites_logzioFunctionApp_name')]",
+            "name": "[parameters('sites_logzioLogsFunctionApp_name')]",
             "apiVersion": "2016-08-01",
             "location": "[resourceGroup().location]",
             "scale": null,
@@ -168,31 +253,31 @@
                         },
                         {
                             "name": "Project",
-                            "value": "eventHubFunction/"
+                            "value": "eventHubFunction/logzioLogsFunction/"
                         },
                         {
                             "name": "AzureWebJobsStorage",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccounts_LogzioAppStorage_name'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_LogzioAppStorage_name')),'2015-05-01-preview').key1)]"
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccounts_LogzioLogsAppStorage_name'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_LogzioLogsAppStorage_name')),'2015-05-01-preview').key1)]"
                         },
                         {
                             "name": "AzureWebJobsDashboard",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccounts_LogzioAppStorage_name'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_LogzioAppStorage_name')),'2015-05-01-preview').key1)]"
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccounts_LogzioLogsAppStorage_name'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_LogzioLogsAppStorage_name')),'2015-05-01-preview').key1)]"
                         },
                         {
-                            "name": "LogzioHost",
-                            "value": "[parameters('LogzioHost')]"
+                            "name": "LogzioLogsHost",
+                            "value": "[parameters('LogzioLogsHost')]"
                         },
                         {
                             "name": "AzureEventHubConnectionString",
-                            "value": "[listkeys(resourceId('Microsoft.EventHub/namespaces/authorizationRules', parameters('namespaces_LogzioNS_name'),parameters('AuthorizationRules_LogzioSharedAccessKey_name')), '2017-04-01').primaryConnectionString]"
+                            "value": "[listkeys(resourceId('Microsoft.EventHub/namespaces/authorizationRules', parameters('namespaces_LogzioNS_name'),parameters('AuthorizationRules_LogzioLogsSharedAccessKey_name')), '2017-04-01').primaryConnectionString]"
                         },
                         {
                             "name": "StorageConnectionString",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccounts_LogzioFailSafe_name'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_LogzioFailSafe_name')),'2015-05-01-preview').key1,';EndpointSuffix=core.windows.net')]"
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccounts_LogzioLogsFailSafe_name'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_LogzioLogsFailSafe_name')),'2015-05-01-preview').key1,';EndpointSuffix=core.windows.net')]"
                         },
                         {
-                            "name": "LogzioToken",
-                            "value": "[parameters('LogzioToken')]"
+                            "name": "LogzioLogsToken",
+                            "value": "[parameters('LogzioLogsToken')]"
                         }
                     ]
                 }
@@ -202,7 +287,7 @@
                 "name": "web",
                 "type": "sourcecontrols",
                 "dependsOn": [
-                    "[resourceId('Microsoft.Web/sites/', parameters('sites_logzioFunctionApp_name'))]"
+                    "[resourceId('Microsoft.Web/sites/', parameters('sites_logzioLogsFunctionApp_name'))]"
                 ],
                 "properties": {
                     "RepoUrl": "[parameters('repoURL')]",
@@ -212,13 +297,96 @@
             }],
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_LogzioSP_name'))]",
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_LogzioAppStorage_name'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_LogzioLogsAppStorage_name'))]",
+                "[concat('Microsoft.EventHub/namespaces/', parameters('namespaces_LogzioNS_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "kind": "functionapp",
+            "name": "[parameters('sites_logzioMetricsFunctionApp_name')]",
+            "apiVersion": "2016-08-01",
+            "location": "[resourceGroup().location]",
+            "scale": null,
+            "properties": {
+                "enabled": true,
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_LogzioSP_name'))]",
+                "reserved": false,
+                "siteConfig": {
+                    "appSettings": [{
+                            "name": "FUNCTIONS_EXTENSION_VERSION",
+                            "value": "~1"
+                        },
+                        {
+                            "name": "Project",
+                            "value": "eventHubFunction/logzioMetricsFunction/"
+                        },
+                        {
+                            "name": "AzureWebJobsStorage",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccounts_LogzioMetricsAppStorage_name'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_LogzioMetricsAppStorage_name')),'2015-05-01-preview').key1)]"
+                        },
+                        {
+                            "name": "AzureWebJobsDashboard",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccounts_LogzioMetricsAppStorage_name'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_LogzioMetricsAppStorage_name')),'2015-05-01-preview').key1)]"
+                        },
+                        {
+                            "name": "LogzioMetricsHost",
+                            "value": "[parameters('LogzioMetricsHost')]"
+                        },
+                        {
+                            "name": "AzureEventHubConnectionString",
+                            "value": "[listkeys(resourceId('Microsoft.EventHub/namespaces/authorizationRules', parameters('namespaces_LogzioNS_name'),parameters('AuthorizationRules_LogzioMetricsSharedAccessKey_name')), '2017-04-01').primaryConnectionString]"
+                        },
+                        {
+                            "name": "StorageConnectionString",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccounts_LogzioMetricsFailSafe_name'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_LogzioMetricsFailSafe_name')),'2015-05-01-preview').key1,';EndpointSuffix=core.windows.net')]"
+                        },
+                        {
+                            "name": "LogzioMetricsToken",
+                            "value": "[parameters('LogzioMetricsToken')]"
+                        }
+                    ]
+                }
+            },
+            "resources": [{
+                "apiVersion": "2015-08-01",
+                "name": "web",
+                "type": "sourcecontrols",
+                "dependsOn": [
+                    "[resourceId('Microsoft.Web/sites/', parameters('sites_logzioMetricsFunctionApp_name'))]"
+                ],
+                "properties": {
+                    "RepoUrl": "[parameters('repoURL')]",
+                    "branch": "[parameters('branch')]",
+                    "IsManualIntegration": true
+                }
+            }],
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_LogzioSP_name'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_LogzioMetricsAppStorage_name'))]",
                 "[concat('Microsoft.EventHub/namespaces/', parameters('namespaces_LogzioNS_name'))]"
             ]
         },
         {
             "type": "Microsoft.EventHub/namespaces/AuthorizationRules",
-            "name": "[concat(parameters('namespaces_LogzioNS_name'), '/', parameters('AuthorizationRules_LogzioSharedAccessKey_name'))]",
+            "name": "[concat(parameters('namespaces_LogzioNS_name'), '/', parameters('AuthorizationRules_LogzioLogsSharedAccessKey_name'))]",
+            "apiVersion": "2017-04-01",
+            "location": "[resourceGroup().location]",
+            "scale": null,
+            "properties": {
+                "rights": [
+                    "Listen",
+                    "Manage",
+                    "Send"
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces', parameters('namespaces_LogzioNS_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces/AuthorizationRules",
+            "name": "[concat(parameters('namespaces_LogzioNS_name'), '/', parameters('AuthorizationRules_LogzioMetricsSharedAccessKey_name'))]",
             "apiVersion": "2017-04-01",
             "location": "[resourceGroup().location]",
             "scale": null,
@@ -255,8 +423,29 @@
             ]
         },
         {
+            "type": "Microsoft.EventHub/namespaces/eventhubs",
+            "name": "[concat(parameters('namespaces_LogzioNS_name'), '/', parameters('eventhubs_insights_operational_metrics_name'))]",
+            "apiVersion": "2017-04-01",
+            "location": "[resourceGroup().location]",
+            "scale": null,
+            "properties": {
+                "messageRetentionInDays": 7,
+                "partitionCount": 4,
+                "status": "Active",
+                "partitionIds": [
+                    "0",
+                    "1",
+                    "2",
+                    "3"
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces', parameters('namespaces_LogzioNS_name'))]"
+            ]
+        },
+        {
             "type": "Microsoft.EventHub/namespaces/eventhubs/consumergroups",
-            "name": "[concat(parameters('namespaces_LogzioNS_name'), '/', parameters('eventhubs_insights_operational_logs_name'), '/', parameters('consumergroups_$Default_name'))]",
+            "name": "[concat(parameters('namespaces_LogzioNS_name'), '/', parameters('eventhubs_insights_operational_logs_name'), '/', parameters('consumergroups_$Default_logs_name'))]",
             "apiVersion": "2017-04-01",
             "location": "[resourceGroup().location]",
             "scale": null,
@@ -264,6 +453,18 @@
             "dependsOn": [
                 "[resourceId('Microsoft.EventHub/namespaces', parameters('namespaces_LogzioNS_name'))]",
                 "[resourceId('Microsoft.EventHub/namespaces/eventhubs', parameters('namespaces_LogzioNS_name'), parameters('eventhubs_insights_operational_logs_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.EventHub/namespaces/eventhubs/consumergroups",
+            "name": "[concat(parameters('namespaces_LogzioNS_name'), '/', parameters('eventhubs_insights_operational_metrics_name'), '/', parameters('consumergroups_$Default_metrics_name'))]",
+            "apiVersion": "2017-04-01",
+            "location": "[resourceGroup().location]",
+            "scale": null,
+            "properties": {},
+            "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces', parameters('namespaces_LogzioNS_name'))]",
+                "[resourceId('Microsoft.EventHub/namespaces/eventhubs', parameters('namespaces_LogzioNS_name'), parameters('eventhubs_insights_operational_metrics_name'))]"
             ]
         }
     ]
