@@ -6,6 +6,8 @@
         "batchCheckpointFrequency": 1
     },
     "functions": [
-        "logzioFunction"
-    ]
+        "logzioLogsFunction",
+        "logzioMetricsFunction"
+    ],
+    "watchDirectories": ["SharedCode"]
 }
