@@ -30,7 +30,7 @@
             "defaultValue": "[concat('logzapplogs', uniqueString(resourceGroup().id))]",
             "type": "String"
         },
-        "storageAccounts_LogzioMetrcisAppStorage_name": {
+        "storageAccounts_LogzioMetricsAppStorage_name": {
             "defaultValue": "[concat('logzappmetrics', uniqueString(resourceGroup().id))]",
             "type": "String"
         },
