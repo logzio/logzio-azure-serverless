@@ -4,16 +4,16 @@
       "type": "eventHubTrigger",
       "name": "eventHubMessages",
       "direction": "in",
-      "path": "insights-logzio-metrics",
+      "path": "insights-operational-metrics",
       "connection": "AzureEventHubMetricsConnectionString",
       "cardinality": "many",
       "consumerGroup": "LogzioMetricsConsumerGroup"
     },
     {
+      "connection": "MetricsStorageConnectionString",
       "type": "blob",
       "name": "outputBlob",
       "path": "logzio-failed-metrics/{rand-guid}",
-      "connection": "MetricsStorageConnectionString",
       "direction": "out"
     }
   ]
