@@ -268,12 +268,20 @@
                             "value": "[parameters('LogzioLogsHost')]"
                         },
                         {
-                            "name": "AzureEventHubConnectionString",
+                            "name": "AzureEventHubLogsConnectionString",
                             "value": "[listkeys(resourceId('Microsoft.EventHub/namespaces/authorizationRules', parameters('namespaces_LogzioNS_name'),parameters('AuthorizationRules_LogzioLogsSharedAccessKey_name')), '2017-04-01').primaryConnectionString]"
                         },
                         {
-                            "name": "StorageConnectionString",
+                            "name": "AzureEventHubMetricsConnectionString",
+                            "value": "[listkeys(resourceId('Microsoft.EventHub/namespaces/authorizationRules', parameters('namespaces_LogzioNS_name'),parameters('AuthorizationRules_LogzioMetricsSharedAccessKey_name')), '2017-04-01').primaryConnectionString]"
+                        },
+                        {
+                            "name": "LogsStorageConnectionString",
                             "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccounts_LogzioLogsFailSafe_name'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_LogzioLogsFailSafe_name')),'2015-05-01-preview').key1,';EndpointSuffix=core.windows.net')]"
+                        },
+                        {
+                            "name": "MetricsStorageConnectionString",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccounts_LogzioMetricsFailSafe_name'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_LogzioMetricsFailSafe_name')),'2015-05-01-preview').key1,';EndpointSuffix=core.windows.net')]"
                         },
                         {
                             "name": "LogzioLogsToken",

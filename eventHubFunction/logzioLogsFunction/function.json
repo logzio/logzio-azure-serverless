@@ -5,9 +5,9 @@
       "name": "eventHubMessages",
       "direction": "in",
       "path": "insights-operational-logs",
-      "connection": "AzureEventHubConnectionString",
+      "connection": "AzureEventHubLogsConnectionString",
       "cardinality": "many",
-      "consumerGroup": "LogzioConsumerGroup"
+      "consumerGroup": "LogzioLogsConsumerGroup"
     },
     {
       "type": "blob",

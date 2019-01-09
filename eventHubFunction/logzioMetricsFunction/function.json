@@ -5,9 +5,9 @@
       "name": "eventHubMessages",
       "direction": "in",
       "path": "insights-logzio-metrics",
-      "connection": "AzureEventHubConnectionString",
+      "connection": "AzureEventHubMetricsConnectionString",
       "cardinality": "many",
-      "consumerGroup": "LogzioConsumerGroup"
+      "consumerGroup": "LogzioMetricsConsumerGroup"
     },
     {
       "type": "blob",
