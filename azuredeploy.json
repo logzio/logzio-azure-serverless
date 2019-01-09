@@ -38,12 +38,8 @@
             "defaultValue": "insights-operational-metrics",
             "type": "String"
         },
-        "AuthorizationRules_LogzioLogsSharedAccessKey_name": {
-            "defaultValue": "LogzioLogsSharedAccessKey",
-            "type": "String"
-        },
-        "AuthorizationRules_LogzioMetricsSharedAccessKey_name": {
-            "defaultValue": "LogzioMetricsSharedAccessKey",
+        "AuthorizationRules_LogzioSharedAccessKey_name": {
+            "defaultValue": "LogzioSharedAccessKey",
             "type": "String"
         },
         "consumergroups_$Default_logs_name": {
@@ -251,11 +247,11 @@
                         },
                         {
                             "name": "AzureEventHubLogsConnectionString",
-                            "value": "[listkeys(resourceId('Microsoft.EventHub/namespaces/authorizationRules', parameters('namespaces_LogzioNS_name'),parameters('AuthorizationRules_LogzioLogsSharedAccessKey_name')), '2017-04-01').primaryConnectionString]"
+                            "value": "[listkeys(resourceId('Microsoft.EventHub/namespaces/authorizationRules', parameters('namespaces_LogzioNS_name'),parameters('AuthorizationRules_LogzioSharedAccessKey_name')), '2017-04-01').primaryConnectionString]"
                         },
                         {
                             "name": "AzureEventHubMetricsConnectionString",
-                            "value": "[listkeys(resourceId('Microsoft.EventHub/namespaces/authorizationRules', parameters('namespaces_LogzioNS_name'),parameters('AuthorizationRules_LogzioMetricsSharedAccessKey_name')), '2017-04-01').primaryConnectionString]"
+                            "value": "[listkeys(resourceId('Microsoft.EventHub/namespaces/authorizationRules', parameters('namespaces_LogzioNS_name'),parameters('AuthorizationRules_LogzioSharedAccessKey_name')), '2017-04-01').primaryConnectionString]"
                         },
                         {
                             "name": "LogsStorageConnectionString",
@@ -297,24 +293,7 @@
         },
         {
             "type": "Microsoft.EventHub/namespaces/AuthorizationRules",
-            "name": "[concat(parameters('namespaces_LogzioNS_name'), '/', parameters('AuthorizationRules_LogzioLogsSharedAccessKey_name'))]",
-            "apiVersion": "2017-04-01",
-            "location": "[resourceGroup().location]",
-            "scale": null,
-            "properties": {
-                "rights": [
-                    "Listen",
-                    "Manage",
-                    "Send"
-                ]
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.EventHub/namespaces', parameters('namespaces_LogzioNS_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.EventHub/namespaces/AuthorizationRules",
-            "name": "[concat(parameters('namespaces_LogzioNS_name'), '/', parameters('AuthorizationRules_LogzioMetricsSharedAccessKey_name'))]",
+            "name": "[concat(parameters('namespaces_LogzioNS_name'), '/', parameters('AuthorizationRules_LogzioSharedAccessKey_name'))]",
             "apiVersion": "2017-04-01",
             "location": "[resourceGroup().location]",
             "scale": null,
