@@ -13,7 +13,7 @@
       "type": "blob",
       "name": "outputBlob",
       "path": "logzio-failed-logs/{rand-guid}",
-      "connection": "StorageConnectionString",
+      "connection": "LogsStorageConnectionString",
       "direction": "out"
     }
   ]
