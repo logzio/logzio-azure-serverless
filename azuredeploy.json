@@ -256,16 +256,28 @@
                             "value": "eventHubFunction/"
                         },
                         {
-                            "name": "AzureWebJobsStorage",
+                            "name": "AzureWebJobsLogsStorage",
                             "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccounts_LogzioLogsAppStorage_name'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_LogzioLogsAppStorage_name')),'2015-05-01-preview').key1)]"
                         },
                         {
-                            "name": "AzureWebJobsDashboard",
+                            "name": "AzureWebJobsMetricsStorage",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccounts_LogzioMetricsAppStorage_name'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_LogzioMetricsAppStorage_name')),'2015-05-01-preview').key1)]"
+                        },
+                        {
+                            "name": "AzureWebJobsLogsDashboard",
                             "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccounts_LogzioLogsAppStorage_name'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_LogzioLogsAppStorage_name')),'2015-05-01-preview').key1)]"
+                        },
+                        {
+                            "name": "AzureWebJobsMetricsDashboard",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccounts_LogzioMetricsAppStorage_name'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_LogzioMetricsAppStorage_name')),'2015-05-01-preview').key1)]"
                         },
                         {
                             "name": "LogzioLogsHost",
                             "value": "[parameters('LogzioLogsHost')]"
+                        },
+                        {
+                            "name": "LogzioMetricsHost",
+                            "value": "[parameters('LogzioMetricsHost')]"
                         },
                         {
                             "name": "AzureEventHubLogsConnectionString",
@@ -286,6 +298,10 @@
                         {
                             "name": "LogzioLogsToken",
                             "value": "[parameters('LogzioLogsToken')]"
+                        },
+                        {
+                            "name": "LogzioMetricsToken",
+                            "value": "[parameters('LogzioMetricsToken')]"
                         }
                     ]
                 }
