@@ -2,8 +2,8 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "sites_logzioLogsFunctionApp_name": {
-            "defaultValue": "[concat('logzioLogsFunctionApp', uniqueString(resourceGroup().id))]",
+        "sites_logzioFunctionApp_name": {
+            "defaultValue": "[concat('logzioFunctionApp', uniqueString(resourceGroup().id))]",
             "type": "String"
         },
         "sites_logzioMetricsFunctionApp_name": {
@@ -31,7 +31,7 @@
             "type": "String"
         },
         "storageAccounts_LogzioMetricsAppStorage_name": {
-            "defaultValue": "[concat('logzappmetrics', uniqueString(resourceGroup().id))]",
+            "defaultValue": "[concat('logzappmets', uniqueString(resourceGroup().id))]",
             "type": "String"
         },
         "eventhubs_insights_operational_logs_name": {
@@ -238,7 +238,7 @@
         {
             "type": "Microsoft.Web/sites",
             "kind": "functionapp",
-            "name": "[parameters('sites_logzioLogsFunctionApp_name')]",
+            "name": "[parameters('sites_logzioFunctionApp_name')]",
             "apiVersion": "2016-08-01",
             "location": "[resourceGroup().location]",
             "scale": null,
@@ -287,7 +287,7 @@
                 "name": "web",
                 "type": "sourcecontrols",
                 "dependsOn": [
-                    "[resourceId('Microsoft.Web/sites/', parameters('sites_logzioLogsFunctionApp_name'))]"
+                    "[resourceId('Microsoft.Web/sites/', parameters('sites_logzioFunctionApp_name'))]"
                 ],
                 "properties": {
                     "RepoUrl": "[parameters('repoURL')]",
@@ -298,72 +298,6 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_LogzioSP_name'))]",
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_LogzioLogsAppStorage_name'))]",
-                "[concat('Microsoft.EventHub/namespaces/', parameters('namespaces_LogzioNS_name'))]"
-            ]
-        },
-        {
-            "type": "Microsoft.Web/sites",
-            "kind": "functionapp",
-            "name": "[parameters('sites_logzioMetricsFunctionApp_name')]",
-            "apiVersion": "2016-08-01",
-            "location": "[resourceGroup().location]",
-            "scale": null,
-            "properties": {
-                "enabled": true,
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_LogzioSP_name'))]",
-                "reserved": false,
-                "siteConfig": {
-                    "appSettings": [{
-                            "name": "FUNCTIONS_EXTENSION_VERSION",
-                            "value": "~1"
-                        },
-                        {
-                            "name": "Project",
-                            "value": "eventHubFunction/logzioMetricsFunction/"
-                        },
-                        {
-                            "name": "AzureWebJobsStorage",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccounts_LogzioMetricsAppStorage_name'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_LogzioMetricsAppStorage_name')),'2015-05-01-preview').key1)]"
-                        },
-                        {
-                            "name": "AzureWebJobsDashboard",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccounts_LogzioMetricsAppStorage_name'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_LogzioMetricsAppStorage_name')),'2015-05-01-preview').key1)]"
-                        },
-                        {
-                            "name": "LogzioMetricsHost",
-                            "value": "[parameters('LogzioMetricsHost')]"
-                        },
-                        {
-                            "name": "AzureEventHubConnectionString",
-                            "value": "[listkeys(resourceId('Microsoft.EventHub/namespaces/authorizationRules', parameters('namespaces_LogzioNS_name'),parameters('AuthorizationRules_LogzioMetricsSharedAccessKey_name')), '2017-04-01').primaryConnectionString]"
-                        },
-                        {
-                            "name": "StorageConnectionString",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('storageAccounts_LogzioMetricsFailSafe_name'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_LogzioMetricsFailSafe_name')),'2015-05-01-preview').key1,';EndpointSuffix=core.windows.net')]"
-                        },
-                        {
-                            "name": "LogzioMetricsToken",
-                            "value": "[parameters('LogzioMetricsToken')]"
-                        }
-                    ]
-                }
-            },
-            "resources": [{
-                "apiVersion": "2015-08-01",
-                "name": "web",
-                "type": "sourcecontrols",
-                "dependsOn": [
-                    "[resourceId('Microsoft.Web/sites/', parameters('sites_logzioMetricsFunctionApp_name'))]"
-                ],
-                "properties": {
-                    "RepoUrl": "[parameters('repoURL')]",
-                    "branch": "[parameters('branch')]",
-                    "IsManualIntegration": true
-                }
-            }],
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_LogzioSP_name'))]",
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_LogzioMetricsAppStorage_name'))]",
                 "[concat('Microsoft.EventHub/namespaces/', parameters('namespaces_LogzioNS_name'))]"
             ]
         },
