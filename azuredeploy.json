@@ -27,7 +27,7 @@
             "type": "String"
         },
         "storageAccounts_LogzioAppStorage_name": {
-            "defaultValue": "[concat('logzapplogs', uniqueString(resourceGroup().id))]",
+            "defaultValue": "[concat('logzapplog', uniqueString(resourceGroup().id))]",
             "type": "String"
         },
         "eventhubs_insights_operational_logs_name": {
