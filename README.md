@@ -1,7 +1,4 @@
 [![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://azuredeploy.net/)
-<a href="https://azuredeploy.net/" target="_blank">
-    <img src="http://azuredeploy.net/deploybutton.png"/>
-</a>
 
 # logzio-azure-serverless
 This repo contains the code and instructions you'll need to ship logs from your Azure services to Logz.io.
