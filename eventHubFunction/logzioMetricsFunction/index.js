@@ -1,5 +1,5 @@
-const logsProcessor = require('../SharedCode/mainIndex');
+const metricsProcessor = require('../SharedCode/mainIndex');
 
 module.exports = function processEventHubMessages(context, eventHubMessages) {
-  logsProcessor(context, eventHubMessages, true);
+  metricsProcessor(context, eventHubMessages, true);
 };
