@@ -24,6 +24,7 @@ Make sure to use these settings:
 **In the BASICS section**
 * **Resource group**: Click **Create new**. <br />
   Give a meaningful **Name**, such as "logzioEventHubIntegration", and then click **OK**.
+* **Location**: Choose the same region as the Azure services that will stream data to this Event Hub.
 
 **In the SETTINGS section:**
 * **Logzio Host**: Use your Logz.io region's listener URL.
