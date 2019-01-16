@@ -13,6 +13,7 @@ function getCallBackFunction(context) {
 
 module.exports = function processEventHubMessages(context, eventHubMessages, enableMetrics) {
   context.log(`Starting Logz.io Azure function with enableMetrics: ${enableMetrics}`);
+  context.log(JSON.stringify(eventHubMessages));
   const callBackFunction = getCallBackFunction(context);
   const logzioShipper = logger.createLogger({
     token: enableMetrics ? process.env.LogzioMetricsToken : process.env.LogzioLogsToken,
