@@ -1,7 +1,6 @@
 const testLogs = require('./test-logs');
 const testMetrics = require('./test-metrics');
 const DataParser = require('../eventHubFunction/SharedCode/data-parser');
-const help = require('../eventHubFunction/logzioMetricsFunction/index');
 
 const context = {
   log: (a) => {
