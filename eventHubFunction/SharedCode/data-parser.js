@@ -35,21 +35,27 @@ class DataParser {
 
   parseLogToMetric(obj) {
     if ('metricName' in obj) {
-      const metricObj = {};
-      const statistics = {};
       const {
         metricName,
       } = obj;
 
+      const metricObj = {
+        metrics: {
+          [metricName]: {},
+        },
+        dimensions: {},
+      };
+
       Object.keys(obj).forEach((key) => {
         if (this.availableStatistics.includes(key)) {
-          statistics[key] = obj[key];
+          metricObj.metrics[metricName][key] = obj[key];
         } else if (key === 'resourceId') {
           const splitArr = obj[key].split('/');
-          for (let i = 1; i < splitArr.length; i += 2) metricObj[splitArr[i]] = splitArr[i + 1];
-        } else if (!(key === 'metricName')) metricObj[key] = obj[key];
+          for (let i = 1; i < splitArr.length; i += 2) metricObj.dimensions[splitArr[i]] = splitArr[i + 1];
+        } else if (key === '@timestamp') {
+          metricObj[key] = obj[key];
+        } else if (!(key === 'metricName')) metricObj.dimensions[key] = obj[key];
       });
-      metricObj[metricName] = statistics;
       return metricObj;
     }
     return obj;

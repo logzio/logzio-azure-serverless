@@ -1,6 +1,7 @@
 const testLogs = require('./test-logs');
 const testMetrics = require('./test-metrics');
 const DataParser = require('../eventHubFunction/SharedCode/data-parser');
+const help = require('../eventHubFunction/logzioMetricsFunction/index');
 
 const context = {
   log: (a) => {
@@ -54,8 +55,8 @@ describe('Azure eventHub function', () => {
     expect(parseMessagesArray[0]).not.toHaveProperty('count');
     expect(parseMessagesArray[0]).not.toHaveProperty('total');
     expect(parseMessagesArray[0]).not.toHaveProperty('average');
-    expect(parseMessagesArray[0]).toHaveProperty('BytesSentRate.total');
-    expect(parseMessagesArray[0]).toHaveProperty('BytesSentRate.count');
-    expect(parseMessagesArray[0]).toHaveProperty('BytesSentRate.average');
+    expect(parseMessagesArray[0]).toHaveProperty('metrics.BytesSentRate.total');
+    expect(parseMessagesArray[0]).toHaveProperty('metrics.BytesSentRate.count');
+    expect(parseMessagesArray[0]).toHaveProperty('metrics.BytesSentRate.average');
   });
 });
