@@ -34,7 +34,6 @@ class DataParser {
   }
 
   parseLogToMetric(obj) {
-    this.internalLogger.log('parseLogToMetric');
     if ('metricName' in obj) {
       const metricObj = {};
       const statistics = {};
@@ -72,7 +71,6 @@ class DataParser {
   }
 
   parseEventHubLogMessagesToArray(eventHubMessage) {
-    this.internalLogger.log(`enableMetrics: ${this.enableMetric}`);
     const parsedMessages = [];
     if (isArray(eventHubMessage)) {
       eventHubMessage.forEach(msg => this.pushParsedMsg(parsedMessages, msg));
