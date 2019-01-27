@@ -11,14 +11,15 @@ function getCallBackFunction(context) {
   };
 }
 
-module.exports = function processEventHubMessages(context, eventHubMessages) {
-  context.log('Starting Logz.io Azure function.');
-
+module.exports = function processEventHubMessages(context, eventHubMessages, enableMetrics) {
+  context.log(`Starting Logz.io Azure function with enableMetrics: ${enableMetrics}`);
+  context.log(JSON.stringify(eventHubMessages));
   const callBackFunction = getCallBackFunction(context);
+
   const logzioShipper = logger.createLogger({
-    token: process.env.LogzioToken,
+    token: enableMetrics ? process.env.LogzioMetricsToken : process.env.LogzioLogsToken,
     type: 'eventHub',
-    host: process.env.LogzioHost,
+    host: enableMetrics ? process.env.LogzioMetricsHost : process.env.LogzioLogsHost,
     protocol: 'https',
     internalLogger: context,
     compress: true,
@@ -26,12 +27,17 @@ module.exports = function processEventHubMessages(context, eventHubMessages) {
     callback: callBackFunction,
   });
 
-  const dataParser = new DataParser(context);
+  const dataParser = new DataParser({
+    internalLogger: context,
+    enableMetric: enableMetrics,
+  });
+
   const parseMessagesArray = dataParser.parseEventHubLogMessagesToArray(eventHubMessages);
   context.log(`About to send ${parseMessagesArray.length} logs...`);
-
   parseMessagesArray.forEach((log) => {
+    context.log(log);
     logzioShipper.log(log);
   });
+
   logzioShipper.sendAndClose(callBackFunction);
 };

@@ -5,15 +5,15 @@
       "name": "eventHubMessages",
       "direction": "in",
       "path": "insights-operational-logs",
-      "connection": "AzureEventHubConnectionString",
+      "connection": "AzureEventHubLogsConnectionString",
       "cardinality": "many",
-      "consumerGroup": "LogzioConsumerGroup"
+      "consumerGroup": "LogzioLogsConsumerGroup"
     },
     {
+      "connection": "LogsStorageConnectionString",
       "type": "blob",
       "name": "outputBlob",
       "path": "logzio-failed-logs/{rand-guid}",
-      "connection": "StorageConnectionString",
       "direction": "out"
     }
   ]
