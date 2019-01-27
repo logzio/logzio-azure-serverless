@@ -7,7 +7,7 @@ At the end of this process, your Azure function will forward logs from an Azure 
 
 ### 1. Deploy the Logz.io template
 
-Click this button to load the Logz.io template in Azure. 👇
+👇 Click this button to load the Logz.io template in Azure.
 
 [![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Flogzio%2Flogzio-azure-serverless%2Fmaster%2Fazuredeploy.json)
 
@@ -23,11 +23,12 @@ Make sure to use these settings:
   Give a meaningful **Name**, such as "logzioEventHubIntegration", and then click **OK**.
 
 **In the SETTINGS section:**
-* **Logzio Host**: Use your Logz.io region's listener URL.
+* **Logs listener host**: Use the listener URL for your logs account region.
   If your login URL is app.logz.io, use `listener.logz.io` (this is the default setting).
   If your login URL is app-eu.logz.io, use `listener-eu.logz.io`.
-* **Logs Account Token**: Use the [token](https://app.logz.io/#/dashboard/settings/general) of the logs account you want to ship to.
-* **Metrics Account Token**: Use the [token](https://app.logz.io/#/dashboard/settings/general) of the metrics account you want to ship to.
+* **Metrics listener host**: Use your the listener URL for your metrics account region (default: `listener.logz.io`).
+* **Logs account token**: Use the [token](https://app.logz.io/#/dashboard/settings/general) of the logs account you want to ship to.
+* **Metrics account token**: Use the [token](https://app.logz.io/#/dashboard/settings/general) of the metrics account you want to ship to.
 
 At the bottom of the page, select **I agree to the terms and conditions stated above**, and then click **Purchase** to deploy.
 
@@ -37,8 +38,6 @@ Deployment can take a few minutes.
 
 You can configure logzio-azure-serverless to back up logs and metrics to Azure Blob Storage.
 So if the connection to Logz.io times out or an error occurs, you'll still have a backup of any dropped data that didn't get shipped.
-
-![Function app left menu](img/function-app-menu-integrate.png)
 
 To do this, expand your function app's left menu, and then click **Integrate**.
 
