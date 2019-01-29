@@ -48,7 +48,6 @@ module.exports = function processEventHubMessages(context, eventHubMessages, { e
   const parseMessagesArray = dataParser.parseEventHubLogMessagesToArray(eventHubMessages);
   context.log(`About to send ${parseMessagesArray.length} logs...`);
   parseMessagesArray.forEach((log) => {
-    context.log(log);
     logzioShipper.log(log);
   });
 
