@@ -18,77 +18,72 @@ class DataParser {
     internalLogger = global.console,
     enableMetric = false,
   }) {
-    this._parsedMessages = [];
-    this._parsing = false;
-    this._internalLogger = internalLogger;
-    this._enableMetric = enableMetric;
-    this._availableStatistics = ['count', 'total', 'average', 'maximum', 'minimum'];
+    this.internalLogger = internalLogger;
+    this.enableMetric = enableMetric;
+    this.availableStatistics = ['count', 'total', 'average', 'maximum', 'minimum'];
   }
 
-  _removeEmpty(obj) {
+  removeEmpty(obj) {
     if (typeof (obj) === 'string') return obj; // for string event.
 
     return Object.keys(obj)
       .filter(k => filterAllEmpty(k, obj[k]))
       .reduce((acc, k) => Object.assign(acc, {
-        [k]: typeof obj[k] === 'object' ? this._removeEmpty(obj[k]) : obj[k],
+        [k]: typeof obj[k] === 'object' ? this.removeEmpty(obj[k]) : obj[k],
       }), {});
   }
 
-  _parseLogToMetric(obj) {
-    const { metricName } = obj;
-    if (!metricName) return obj;
+  parseLogToMetric(obj) {
+    if ('metricName' in obj) {
+      const {
+        metricName,
+      } = obj;
 
-    const metricObj = {
-      metrics: {
-        [metricName]: {},
-      },
-      dimensions: {},
-    };
+      const metricObj = {
+        metrics: {
+          [metricName]: {},
+        },
+        dimensions: {},
+      };
 
-    Object.entries(obj).forEach(([key, value]) => {
-      if (this._availableStatistics.includes(key)) {
-        metricObj.metrics[metricName][key] = value;
-      } else if (key === 'resourceId') {
-        const splitArr = value.split('/');
-
-        for (let i = 1; i < splitArr.length; i += 2) {
-          metricObj.dimensions[splitArr[i]] = splitArr[i + 1];
-        }
-      } else if (key === '@timestamp') {
-        metricObj[key] = value;
-      } else if (key !== 'metricName') {
-        metricObj.dimensions[key] = value;
-      }
-    });
-    return metricObj;
+      Object.keys(obj).forEach((key) => {
+        if (this.availableStatistics.includes(key)) {
+          metricObj.metrics[metricName][key] = obj[key];
+        } else if (key === 'resourceId') {
+          const splitArr = obj[key].split('/');
+          for (let i = 1; i < splitArr.length; i += 2) metricObj.dimensions[splitArr[i]] = splitArr[i + 1];
+        } else if (key === '@timestamp') {
+          metricObj[key] = obj[key];
+        } else if (!(key === 'metricName')) metricObj.dimensions[key] = obj[key];
+      });
+      return metricObj;
+    }
+    return obj;
   }
 
-  _renameKeyRemoveEmpty(obj) {
+  renameKeyRemoveEmpty(obj) {
     renameLogKey(obj);
-    return this._enableMetric
-      ? this._parseLogToMetric(this._removeEmpty(obj))
-      : this._removeEmpty(obj);
+    return this.enableMetric
+      ? this.parseLogToMetric(this.removeEmpty(obj))
+      : this.removeEmpty(obj);
   }
 
-  _pushMessage(msg) {
+  pushParsedMsg(parsedMessages, msg) {
     if (isArray(msg.records)) {
-      msg.records.forEach(subMsg => this._parsedMessages.push(this._renameKeyRemoveEmpty(subMsg)));
+      msg.records.forEach(subMsg => parsedMessages.push(this.renameKeyRemoveEmpty(subMsg)));
     } else {
-      this._parsedMessages.push(this._renameKeyRemoveEmpty(msg));
+      parsedMessages.push(this.renameKeyRemoveEmpty(msg));
     }
   }
 
   parseEventHubLogMessagesToArray(eventHubMessage) {
-    if (this._parsing === true) throw Error('already parsing, create a new DataParser');
-    this._parsing = true;
-
+    const parsedMessages = [];
     if (isArray(eventHubMessage)) {
-      eventHubMessage.forEach(msg => this._pushMessage(msg));
+      eventHubMessage.forEach(msg => this.pushParsedMsg(parsedMessages, msg));
     } else {
-      this._pushMessage(eventHubMessage);
+      this.pushParsedMsg(parsedMessages, eventHubMessage);
     }
-    return this._parsedMessages;
+    return parsedMessages;
   }
 }
 

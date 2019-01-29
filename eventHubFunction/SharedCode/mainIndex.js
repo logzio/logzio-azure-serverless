@@ -11,28 +11,15 @@ function getCallBackFunction(context) {
   };
 }
 
-const parserOptions = {
-  metrics: {
-    token: process.env.LogzioMetricsToken,
-    host: process.env.LogzioMetricsHost,
-  },
-  logs: {
-    token: process.env.LogzioLogsToken,
-    host: process.env.LogzioLogsHost,
-  },
-};
-
-module.exports = function processEventHubMessages(context, eventHubMessages, { enableMetric = false }) {
-  const { host, token } = enableMetric ? parserOptions.metrics : parserOptions.logs;
-
-  context.log(`Starting Logz.io Azure function with enableMetrics: ${enableMetric}`);
+module.exports = function processEventHubMessages(context, eventHubMessages, enableMetrics) {
+  context.log(`Starting Logz.io Azure function with enableMetrics: ${enableMetrics}`);
   context.log(JSON.stringify(eventHubMessages));
   const callBackFunction = getCallBackFunction(context);
 
   const logzioShipper = logger.createLogger({
-    token,
-    host,
+    token: enableMetrics ? process.env.LogzioMetricsToken : process.env.LogzioLogsToken,
     type: 'eventHub',
+    host: enableMetrics ? process.env.LogzioMetricsHost : process.env.LogzioLogsHost,
     protocol: 'https',
     internalLogger: context,
     compress: true,
@@ -42,12 +29,13 @@ module.exports = function processEventHubMessages(context, eventHubMessages, { e
 
   const dataParser = new DataParser({
     internalLogger: context,
-    enableMetric,
+    enableMetric: enableMetrics,
   });
 
   const parseMessagesArray = dataParser.parseEventHubLogMessagesToArray(eventHubMessages);
   context.log(`About to send ${parseMessagesArray.length} logs...`);
   parseMessagesArray.forEach((log) => {
+    context.log(log);
     logzioShipper.log(log);
   });
 
