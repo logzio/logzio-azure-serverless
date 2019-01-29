@@ -23,7 +23,7 @@ const parserOptions = {
 };
 
 module.exports = function processEventHubMessages(context, eventHubMessages, { enableMetric = false }) {
-  const { host, token } = parserOptions[enableMetric ? parserOptions.metrics : parserOptions.logs];
+  const { host, token } = enableMetric ? parserOptions.metrics : parserOptions.logs;
 
   context.log(`Starting Logz.io Azure function with enableMetrics: ${enableMetric}`);
   context.log(JSON.stringify(eventHubMessages));
