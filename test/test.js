@@ -57,5 +57,9 @@ describe('Azure eventHub function', () => {
     expect(parseMessagesArray[0]).toHaveProperty('metrics.BytesSentRate.total');
     expect(parseMessagesArray[0]).toHaveProperty('metrics.BytesSentRate.count');
     expect(parseMessagesArray[0]).toHaveProperty('metrics.BytesSentRate.average');
+    expect(parseMessagesArray[0]).toHaveProperty('dimensions.SUBSCRIPTIONS');
+    expect(parseMessagesArray[0]).toHaveProperty('dimensions.RESOURCEGROUPS');
+    expect(parseMessagesArray[0]).toHaveProperty('dimensions.PROVIDERS');
+    expect(parseMessagesArray[0]).toHaveProperty('dimensions.NETWORKINTERFACES');
   });
 });
