@@ -11,7 +11,7 @@ const context = {
   },
 };
 
-describe('Azure eventHub function', () => {
+describe('Azure eventHub functions - unittest', () => {
   it('Simple string and json logs', () => {
     const eventHubMessages = [testLogs.simpleJsonLog, testLogs.simpleJsonLog];
     const dataParser = new DataParser(context);
