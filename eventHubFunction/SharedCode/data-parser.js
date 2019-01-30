@@ -48,19 +48,19 @@ class DataParser {
       dimensions: {},
     };
 
-    Object.entries(obj).forEach(([key, value]) => {
+    Object.keys(obj).forEach((key) => {
       if (this._availableStatistics.includes(key)) {
-        metricObj.metrics[metricName][key] = value;
+        metricObj.metrics[metricName][key] = obj[key];
       } else if (key === 'resourceId') {
-        const splitArr = value.split('/');
+        const splitArr = obj[key].split('/');
 
         for (let i = 1; i < splitArr.length; i += 2) {
           metricObj.dimensions[splitArr[i]] = splitArr[i + 1];
         }
       } else if (key === '@timestamp') {
-        metricObj[key] = value;
+        metricObj[key] = obj[key];
       } else if (key !== 'metricName') {
-        metricObj.dimensions[key] = value;
+        metricObj.dimensions[key] = obj[key];
       }
     });
     return metricObj;
