@@ -2,8 +2,8 @@ const nock = require('nock');
 const testLogs = require('./test-logs');
 const testMetrics = require('./test-metrics');
 const DataParser = require('../eventHubFunction/SharedCode/data-parser');
-const logsFunction = require('../eventHubFunction/logzioLogsFunction'); // todo delete
-const metricsFunction = require('../eventHubFunction/logzioMetricsFunction'); // todo delete
+const logsFunction = require('../eventHubFunction/logzioLogsFunction');
+const metricsFunction = require('../eventHubFunction/logzioMetricsFunction');
 
 const dummyHost = 'mocked-listener.logz.io';
 const nockHttpAddress = `https://${dummyHost}:8071`;
@@ -80,23 +80,25 @@ describe('Azure eventHub functions - unittest', () => {
       process.env.LogzioLogsHost = dummyHost;
     });
 
-    it.only('logzioLogsFunction', (done) => {
-      console.log(process.env.LogzioLogsToken);
+    it('logzioLogsFunction', (done) => {
       nock(nockHttpAddress)
         .post('/')
-        .query({ token: dummyToken })
-        .reply(200, (uri, body) => {
+        .query({
+          token: dummyToken,
+        })
+        .reply(200, () => {
           done();
         });
       logsFunction(context, [testLogs.auditLogs]);
     });
 
-    it.only('logzioMetricsFunction', (done) => {
-      console.log(process.env.LogzioLogsToken);
+    it('logzioMetricsFunction', (done) => {
       nock(nockHttpAddress)
         .post('/')
-        .query({ token: dummyToken })
-        .reply(200, (uri, body) => {
+        .query({
+          token: dummyToken,
+        })
+        .reply(200, () => {
           done();
         });
       metricsFunction(context, [testMetrics.aksAgentPool]);
