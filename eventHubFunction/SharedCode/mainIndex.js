@@ -11,7 +11,7 @@ function getCallBackFunction(context) {
   };
 }
 
-const parserOptions = {
+const getParserOptions = () => ({
   metrics: {
     token: process.env.LogzioMetricsToken,
     host: process.env.LogzioMetricsHost,
@@ -20,7 +20,7 @@ const parserOptions = {
     token: process.env.LogzioLogsToken,
     host: process.env.LogzioLogsHost,
   },
-};
+});
 
 module.exports = function processEventHubMessages(context, eventHubMessages, {
   enableMetric = false,
@@ -28,8 +28,7 @@ module.exports = function processEventHubMessages(context, eventHubMessages, {
   const {
     host,
     token,
-  } = enableMetric ? parserOptions.metrics : parserOptions.logs;
-
+  } = enableMetric ? getParserOptions().metrics : getParserOptions().logs;
   context.log(`Starting Logz.io Azure function with enableMetrics: ${enableMetric}`);
   context.log(JSON.stringify(eventHubMessages));
   const callBackFunction = getCallBackFunction(context);

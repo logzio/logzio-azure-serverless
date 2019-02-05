@@ -1,6 +1,14 @@
+const nock = require('nock');
 const testLogs = require('./test-logs');
 const testMetrics = require('./test-metrics');
 const DataParser = require('../eventHubFunction/SharedCode/data-parser');
+const logsFunction = require('../eventHubFunction/logzioLogsFunction'); // todo delete
+const metricsFunction = require('../eventHubFunction/logzioMetricsFunction'); // todo delete
+
+const dummyHost = 'mocked-listener.logz.io';
+const nockHttpAddress = `https://${dummyHost}:8071`;
+const dummyToken = '123456789';
+
 
 const context = {
   log: (a) => {
@@ -9,6 +17,7 @@ const context = {
   done: () => {
     console.log('done');
   },
+  err: error => console.log(error),
 };
 
 describe('Azure eventHub functions - unittest', () => {
@@ -61,5 +70,36 @@ describe('Azure eventHub functions - unittest', () => {
     expect(parseMessagesArray[0]).toHaveProperty('dimensions.RESOURCEGROUPS');
     expect(parseMessagesArray[0]).toHaveProperty('dimensions.PROVIDERS');
     expect(parseMessagesArray[0]).toHaveProperty('dimensions.NETWORKINTERFACES');
+  });
+
+  describe('Test functions full flow', () => {
+    beforeEach(() => {
+      process.env.LogzioMetricsToken = dummyToken;
+      process.env.LogzioLogsToken = dummyToken;
+      process.env.LogzioMetricsHost = dummyHost;
+      process.env.LogzioLogsHost = dummyHost;
+    });
+
+    it.only('logzioLogsFunction', (done) => {
+      console.log(process.env.LogzioLogsToken);
+      nock(nockHttpAddress)
+        .post('/')
+        .query({ token: dummyToken })
+        .reply(200, (uri, body) => {
+          done();
+        });
+      logsFunction(context, [testLogs.auditLogs]);
+    });
+
+    it.only('logzioMetricsFunction', (done) => {
+      console.log(process.env.LogzioLogsToken);
+      nock(nockHttpAddress)
+        .post('/')
+        .query({ token: dummyToken })
+        .reply(200, (uri, body) => {
+          done();
+        });
+      metricsFunction(context, [testMetrics.aksAgentPool]);
+    });
   });
 });
