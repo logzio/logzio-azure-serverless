@@ -72,6 +72,28 @@ describe('Azure eventHub functions - unittest', () => {
     expect(parseMessagesArray[0]).toHaveProperty('dimensions.NETWORKINTERFACES');
   });
 
+  it('VM Linux agent metrics', () => {
+    const eventHubMessages = [testMetrics.vmLinuxMetric];
+    const dataParser = new DataParser({
+      internalLogger: context,
+      enableMetric: true,
+    });
+    const parseMessagesArray = dataParser.parseEventHubLogMessagesToArray(eventHubMessages);
+    expect(parseMessagesArray.length).toBe(1);
+    expect(parseMessagesArray[0]).not.toHaveProperty('time');
+    expect(parseMessagesArray[0]).not.toHaveProperty('metricName');
+    expect(parseMessagesArray[0]).not.toHaveProperty('count');
+    expect(parseMessagesArray[0]).not.toHaveProperty('total');
+    expect(parseMessagesArray[0]).not.toHaveProperty('average');
+    expect(parseMessagesArray[0]).toHaveProperty('metrics./builtin/disk/readbytespersecond.total');
+    expect(parseMessagesArray[0]).toHaveProperty('metrics./builtin/disk/readbytespersecond.count');
+    expect(parseMessagesArray[0]).toHaveProperty('metrics./builtin/disk/readbytespersecond.average');
+    expect(parseMessagesArray[0]).toHaveProperty('dimensions.subscriptions');
+    expect(parseMessagesArray[0]).toHaveProperty('dimensions.resourceGroups');
+    expect(parseMessagesArray[0]).toHaveProperty('dimensions.providers');
+    expect(parseMessagesArray[0]).toHaveProperty('dimensions.virtualMachines');
+  });
+
   describe('Test functions full flow', () => {
     beforeEach(() => {
       process.env.LogzioMetricsToken = dummyToken;
