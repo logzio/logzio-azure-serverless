@@ -28,11 +28,18 @@ class DataParser {
   _removeEmpty(obj) {
     if (typeof (obj) === 'string') return obj; // for string event.
 
-    return Object.keys(obj)
+    const filteredSubTree = Object.keys(obj)
       .filter(k => filterAllEmpty(k, obj[k]))
       .reduce((acc, k) => Object.assign(acc, {
         [k]: typeof obj[k] === 'object' ? this._removeEmpty(obj[k]) : obj[k],
       }), {});
+
+    // In case of object that all of its values are empty
+    Object.keys(filteredSubTree).forEach((key) => {
+      if (!filterAllEmpty(key, filteredSubTree[key])) delete filteredSubTree[key];
+    });
+
+    return filteredSubTree;
   }
 
   _parseLogToMetric(obj) {
