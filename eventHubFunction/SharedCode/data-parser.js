@@ -3,7 +3,7 @@ const isEmptyArray = arr => (isArray(arr) ? arr.length === 0 : false);
 const isNil = item => item == null || item === 'null' || item === 'undefined';
 const isEmpty = item => item === '';
 const isEmptyObj = obj => (typeof obj === 'object' ? Object.keys(obj).length === 0 : false);
-const filterAllEmpty = (k, v) => !isEmpty(k) && !isNil(k) && !isEmpty(v)
+const isAllEmpty = (k, v) => !isEmpty(k) && !isNil(k) && !isEmpty(v)
   && !isNil(v) && !isEmptyArray(v) && !isEmptyObj(v);
 const renameLogKey = (obj) => {
   if (obj.time) {
@@ -28,18 +28,18 @@ class DataParser {
   _removeEmpty(obj) {
     if (typeof (obj) === 'string') return obj; // for string event.
 
-    const filteredSubTree = Object.keys(obj)
-      .filter(k => filterAllEmpty(k, obj[k]))
+    const cleanObj = Object.keys(obj)
+      .filter(k => isAllEmpty(k, obj[k]))
       .reduce((acc, k) => Object.assign(acc, {
         [k]: typeof obj[k] === 'object' ? this._removeEmpty(obj[k]) : obj[k],
       }), {});
 
     // In case of object that all of its values are empty
-    Object.keys(filteredSubTree).forEach((key) => {
-      if (!filterAllEmpty(key, filteredSubTree[key])) delete filteredSubTree[key];
+    Object.keys(cleanObj).forEach((key) => {
+      if (!isAllEmpty(key, cleanObj[key])) delete cleanObj[key];
     });
 
-    return filteredSubTree;
+    return cleanObj;
   }
 
   _parseLogToMetric(obj) {
