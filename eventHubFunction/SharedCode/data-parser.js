@@ -3,7 +3,7 @@ const isEmptyArray = arr => (isArray(arr) ? arr.length === 0 : false);
 const isNil = item => item == null || item === 'null' || item === 'undefined';
 const isEmpty = item => item === '';
 const isEmptyObj = obj => (typeof obj === 'object' ? Object.keys(obj).length === 0 : false);
-const filterAllEmpty = (k, v) => !isEmpty(k) && !isNil(k) && !isEmpty(v)
+const isAllEmpty = (k, v) => !isEmpty(k) && !isNil(k) && !isEmpty(v)
   && !isNil(v) && !isEmptyArray(v) && !isEmptyObj(v);
 const renameLogKey = (obj) => {
   if (obj.time) {
@@ -18,72 +18,86 @@ class DataParser {
     internalLogger = global.console,
     enableMetric = false,
   }) {
-    this.internalLogger = internalLogger;
-    this.enableMetric = enableMetric;
-    this.availableStatistics = ['count', 'total', 'average', 'maximum', 'minimum'];
+    this._parsedMessages = [];
+    this._parsing = false;
+    this._internalLogger = internalLogger;
+    this._enableMetric = enableMetric;
+    this._availableStatistics = ['count', 'total', 'average', 'maximum', 'minimum'];
   }
 
-  removeEmpty(obj) {
+  _removeEmpty(obj) {
     if (typeof (obj) === 'string') return obj; // for string event.
 
-    return Object.keys(obj)
-      .filter(k => filterAllEmpty(k, obj[k]))
+    const cleanObj = Object.keys(obj)
+      .filter(k => isAllEmpty(k, obj[k]))
       .reduce((acc, k) => Object.assign(acc, {
-        [k]: typeof obj[k] === 'object' ? this.removeEmpty(obj[k]) : obj[k],
+        [k]: typeof obj[k] === 'object' ? this._removeEmpty(obj[k]) : obj[k],
       }), {});
+
+    // In case of object that all of its values are empty
+    Object.keys(cleanObj).forEach((key) => {
+      if (!isAllEmpty(key, cleanObj[key])) delete cleanObj[key];
+    });
+
+    return cleanObj;
   }
 
-  parseLogToMetric(obj) {
-    if ('metricName' in obj) {
-      const {
-        metricName,
-      } = obj;
+  _parseLogToMetric(obj) {
+    const {
+      metricName,
+    } = obj;
+    if (!metricName) return obj;
 
-      const metricObj = {
-        metrics: {
-          [metricName]: {},
-        },
-        dimensions: {},
-      };
+    const metricObj = {
+      metrics: {
+        [metricName]: {},
+      },
+      dimensions: {},
+    };
 
-      Object.keys(obj).forEach((key) => {
-        if (this.availableStatistics.includes(key)) {
-          metricObj.metrics[metricName][key] = obj[key];
-        } else if (key === 'resourceId') {
-          const splitArr = obj[key].split('/');
-          for (let i = 1; i < splitArr.length; i += 2) metricObj.dimensions[splitArr[i]] = splitArr[i + 1];
-        } else if (key === '@timestamp') {
-          metricObj[key] = obj[key];
-        } else if (!(key === 'metricName')) metricObj.dimensions[key] = obj[key];
-      });
-      return metricObj;
-    }
-    return obj;
+    Object.keys(obj).forEach((key) => {
+      if (this._availableStatistics.includes(key)) {
+        metricObj.metrics[metricName][key] = obj[key];
+      } else if (key === 'resourceId') {
+        const splitArr = obj[key].split('/');
+
+        for (let i = 1; i < splitArr.length; i += 2) {
+          metricObj.dimensions[splitArr[i]] = splitArr[i + 1];
+        }
+      } else if (key === '@timestamp') {
+        metricObj[key] = obj[key];
+      } else if (key !== 'metricName') {
+        metricObj.dimensions[key] = obj[key];
+      }
+    });
+    return metricObj;
   }
 
-  renameKeyRemoveEmpty(obj) {
+  _renameKeyRemoveEmpty(obj) {
     renameLogKey(obj);
-    return this.enableMetric
-      ? this.parseLogToMetric(this.removeEmpty(obj))
-      : this.removeEmpty(obj);
+    return this._enableMetric
+      ? this._parseLogToMetric(this._removeEmpty(obj))
+      : this._removeEmpty(obj);
   }
 
-  pushParsedMsg(parsedMessages, msg) {
+  _pushMessage(msg) {
     if (isArray(msg.records)) {
-      msg.records.forEach(subMsg => parsedMessages.push(this.renameKeyRemoveEmpty(subMsg)));
+      msg.records.forEach(subMsg => this._parsedMessages.push(this._renameKeyRemoveEmpty(subMsg)));
     } else {
-      parsedMessages.push(this.renameKeyRemoveEmpty(msg));
+      this._parsedMessages.push(this._renameKeyRemoveEmpty(msg));
     }
   }
 
   parseEventHubLogMessagesToArray(eventHubMessage) {
-    const parsedMessages = [];
+    if (this._parsing === true) throw Error('already parsing, create a new DataParser');
+    this._parsing = true;
+
     if (isArray(eventHubMessage)) {
-      eventHubMessage.forEach(msg => this.pushParsedMsg(parsedMessages, msg));
+      eventHubMessage.forEach(msg => this._pushMessage(msg));
     } else {
-      this.pushParsedMsg(parsedMessages, eventHubMessage);
+      this._pushMessage(eventHubMessage);
     }
-    return parsedMessages;
+    return this._parsedMessages;
   }
 }
 
