@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/logzio/logzio-azure-serverless#readme",
   "devDependencies": {
-    "eslint": "^5.10.0",
+    "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0"
   },
