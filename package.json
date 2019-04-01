@@ -20,9 +20,9 @@
   "homepage": "https://github.com/logzio/logzio-azure-serverless#readme",
   "dependencies": {
     "acorn": "^6.0.4",
-    "jest": "^23.6.0",
-    "nock": "10.0.6",
-    "logzio-nodejs": "^1.0.3"
+    "jest": "^24.5.0",
+    "logzio-nodejs": "^1.0.3",
+    "nock": "10.0.6"
   },
   "devDependencies": {
     "eslint": "^5.10.0",
