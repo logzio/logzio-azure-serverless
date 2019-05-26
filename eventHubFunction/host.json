@@ -9,5 +9,5 @@
         "logzioLogsFunction",
         "logzioMetricsFunction"
     ],
-    "watchDirectories": ["SharedCode"]
+    "watchDirectories": ["../SharedCode"]
 }
