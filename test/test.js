@@ -1,7 +1,7 @@
 const nock = require('nock');
 const testLogs = require('./test-logs');
 const testMetrics = require('./test-metrics');
-const DataParser = require('../SharedCode/data-parser');
+const DataParser = require('../eventHubFunction/SharedCode/data-parser');
 const logsFunction = require('../eventHubFunction/logzioLogsFunction');
 const metricsFunction = require('../eventHubFunction/logzioMetricsFunction');
 
