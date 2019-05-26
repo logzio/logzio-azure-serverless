@@ -1,1 +1,1 @@
-echo "test"
+mkdir -p foo
