@@ -7,7 +7,7 @@ At the end of this process, your Azure function will forward logs from an Azure 
 
 ### 1. Deploy the Logz.io template
 
-👇 Click a button to load the Logz.io template in Azure.
+👇 Choose a Logz.io template to load in Azure.
 
 | Logs | Metrics |
 |---|---|
