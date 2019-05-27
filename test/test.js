@@ -21,7 +21,7 @@ describe('Azure eventHub functions - unittest', () => {
     const eventHubMessages = [testLogs.simpleJsonLog, testLogs.simpleJsonLog];
     const dataParser = new DataParser(context);
     const parseMessagesArray = dataParser.parseEventHubLogMessagesToArray(eventHubMessages);
-    expect(parseMessagesArray.length).toBe(2);
+    expect(parseMessagesArray.length).toBe(3);
     expect(parseMessagesArray[0]).toBe(eventHubMessages[0]);
     expect(parseMessagesArray[1]).toBe(eventHubMessages[1]);
   });
