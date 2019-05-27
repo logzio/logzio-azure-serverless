@@ -8,8 +8,11 @@ At the end of this process, your Azure function will forward logs from an Azure 
 ### 1. Deploy the Logz.io template
 
 👇 Click this button to load the Logz.io template in Azure.
-
+**Logs**
 [![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Flogzio%2Flogzio-azure-serverless%2Fmaster%2Fazuredeploy.json)
+
+**Metrics**
+[![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Flogzio%2Flogzio-azure-serverless%2Fcheck-independent-deploy%2Fdeployments%2Fazuredeploymetrics.json)
 
 
 ### 2. Configure the template
