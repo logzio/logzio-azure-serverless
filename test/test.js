@@ -1,9 +1,9 @@
 const nock = require('nock');
 const testLogs = require('./test-logs');
 const testMetrics = require('./test-metrics');
-const DataParser = require('../eventHubFunction/SharedCode/data-parser');
-const logsFunction = require('../eventHubFunction/logzioLogsFunction');
-const metricsFunction = require('../eventHubFunction/logzioMetricsFunction');
+const DataParser = require('../src/data-parser');
+const logsFunction = require('../src/logs-index');
+const metricsFunction = require('../src/metrics-index');
 
 const dummyHost = 'mocked-listener.logz.io';
 const nockHttpAddress = `https://${dummyHost}:8071`;
@@ -11,13 +11,9 @@ const dummyToken = '123456789';
 
 
 const context = {
-  log: (a) => {
-    console.log(a);
-  },
-  done: () => {
-    console.log('done');
-  },
-  err: error => console.log(error),
+  log: () => {},
+  done: () => {},
+  err: () => {},
 };
 
 describe('Azure eventHub functions - unittest', () => {

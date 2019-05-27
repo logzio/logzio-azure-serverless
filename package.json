@@ -6,7 +6,13 @@
   "scripts": {
     "lint": "eslint",
     "test": "jest",
-    "watch": "jest --watch"
+    "watch": "jest --watch",
+    "build": "sh build.sh"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm run build"
+    }
   },
   "repository": {
     "type": "git",
@@ -27,6 +33,7 @@
   "devDependencies": {
     "eslint": "^5.10.0",
     "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.14.0"
+    "eslint-plugin-import": "^2.14.0",
+    "husky": "^2.3.0"
   }
 }
