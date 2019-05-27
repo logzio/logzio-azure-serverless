@@ -176,7 +176,7 @@
                         },
                         {
                             "name": "Project",
-                            "value": "eventHubFunction/"
+                            "value": "dist/logs/"
                         },
                         {
                             "name": "AzureWebJobsStorage",

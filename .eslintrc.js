@@ -2,7 +2,7 @@ module.exports = {
     'rules': {
         "no-underscore-dangle": 0,
         "max-len": [1, {
-            code: 121
+            code: 250
         }],
         "no-param-reassign": 0,
     },
