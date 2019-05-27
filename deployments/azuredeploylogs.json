@@ -192,7 +192,7 @@
                         },
                         {
                             "name": "AzureEventHubLogsConnectionString",
-                            "value": "[listkeys(resourceId('Microsoft.EventHub/namespaces/authorizationRules', parameters('namespaces_LogzioLogsNS_name'),parameters('AuthorizationRules_LogzioSharedAccessKey_name')), '2017-04-01').primaryConnectionString]"
+                            "value": "[listkeys(resourceId('Microsoft.EventHub/namespaces/authorizationRules', parameters('namespaces_LogzioLogsNS_name'),parameters('AuthorizationRules_LogzioLogsSharedAccessKey_name')), '2017-04-01').primaryConnectionString]"
                         },
                         {
                             "name": "LogsStorageConnectionString",
