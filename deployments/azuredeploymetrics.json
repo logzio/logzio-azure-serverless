@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "sites_logzioMetricsFunctionApp_name": {
-            "defaultValue": "[concat('sites_logzioMFunctionApp_name', uniqueString(resourceGroup().id))]",
+            "defaultValue": "[concat('logzioMFunctionApp', uniqueString(resourceGroup().id))]",
             "type": "String"
         },
         "storageAccounts_LogzioMetricsFailSafe_name": {
