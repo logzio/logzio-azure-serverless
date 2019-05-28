@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "sites_logzioLogsFunctionApp_name": {
-            "defaultValue": "[concat('logzioLogsFunctionApp', uniqueString(resourceGroup().id))]",
+            "defaultValue": "[concat('logzioLFunctionApp', uniqueString(resourceGroup().id))]",
             "type": "String"
         },
         "storageAccounts_LogzioLogsFailSafe_name": {
@@ -11,27 +11,27 @@
             "type": "String"
         },
         "namespaces_LogzioLogsNS_name": {
-            "defaultValue": "[concat('LogzioLogsNS', uniqueString(resourceGroup().id))]",
+            "defaultValue": "[concat('LogzioLNS', uniqueString(resourceGroup().id))]",
             "type": "String"
         },
         "serverfarms_LogzioLogsSP_name": {
-            "defaultValue": "[concat('logzioLogsAppServicePlan', uniqueString(resourceGroup().id))]",
+            "defaultValue": "[concat('logzioLAppServicePlan', uniqueString(resourceGroup().id))]",
             "type": "String"
         },
         "storageAccounts_LogzioLogsAppStorage_name": {
-            "defaultValue": "[concat('logzloglog', uniqueString(resourceGroup().id))]",
+            "defaultValue": "[concat('logzllog', uniqueString(resourceGroup().id))]",
             "type": "String"
         },
         "eventhubs_insights_operational_logs_name": {
             "defaultValue": "insights-operational-logs",
             "type": "String"
         },
-        "AuthorizationRules_LogzioLogSharedAccessKey_name": {
-            "defaultValue": "LogzioLogsSharedAccessKey",
+        "AuthorizationRules_LogzioLogsSharedAccessKey_name": {
+            "defaultValue": "LogzioLSharedAccessKey",
             "type": "String"
         },
         "consumergroups_$Default_logs_name": {
-            "defaultValue": "LogzioLogsConsumerGroup",
+            "defaultValue": "LogzioLConsumerGroup",
             "type": "String"
         },
         "repoURL": {

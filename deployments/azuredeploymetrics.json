@@ -11,15 +11,15 @@
             "type": "String"
         },
         "namespaces_LogzioMetricsNS_name": {
-            "defaultValue": "[concat('LogzioMetricsNS', uniqueString(resourceGroup().id))]",
+            "defaultValue": "[concat('LogzioMNS', uniqueString(resourceGroup().id))]",
             "type": "String"
         },
         "serverfarms_LogzioMetricsSP_name": {
-            "defaultValue": "[concat('logzioMetricsAppServicePlan', uniqueString(resourceGroup().id))]",
+            "defaultValue": "[concat('logzioMAppServicePlan', uniqueString(resourceGroup().id))]",
             "type": "String"
         },
         "storageAccounts_LogzioMetricsAppStorage_name": {
-            "defaultValue": "[concat('logzmetlog', uniqueString(resourceGroup().id))]",
+            "defaultValue": "[concat('logzmlog', uniqueString(resourceGroup().id))]",
             "type": "String"
         },
         "eventhubs_insights_operational_metrics_name": {
@@ -31,7 +31,7 @@
             "type": "String"
         },
         "consumergroups_$Default_metrics_name": {
-            "defaultValue": "LogzioMetricsConsumerGroup",
+            "defaultValue": "LogzioMConsumerGroup",
             "type": "String"
         },
         "repoURL": {
