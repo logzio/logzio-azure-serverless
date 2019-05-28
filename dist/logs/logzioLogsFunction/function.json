@@ -7,7 +7,7 @@
       "path": "insights-operational-logs",
       "connection": "AzureEventHubLogsConnectionString",
       "cardinality": "many",
-      "consumerGroup": "LogzioLogsConsumerGroup"
+      "consumerGroup": "LogzioLConsumerGroup"
     },
     {
       "connection": "LogsStorageConnectionString",
