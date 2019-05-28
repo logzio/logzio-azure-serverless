@@ -2,7 +2,7 @@
   "name": "logzio-logs-function",
   "version": "1.0.0",
   "description": "This package will collect logs from eventhub and send them to Logz.io",
-  "main": "logs-index.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -2,7 +2,7 @@
   "name": "logzio-metrics-function",
   "version": "1.0.0",
   "description": "This package will collect metrics from eventhub and send them to Logz.io",
-  "main": "metrics-index.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
