@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "sites_logzioMetricsFunctionApp_name": {
-            "defaultValue": "[concat('sites_logzioMetricsFunctionApp_name', uniqueString(resourceGroup().id))]",
+            "defaultValue": "[concat('sites_logzioMFunctionApp_name', uniqueString(resourceGroup().id))]",
             "type": "String"
         },
         "storageAccounts_LogzioMetricsFailSafe_name": {
@@ -27,7 +27,7 @@
             "type": "String"
         },
         "AuthorizationRules_LogzioMetricsSharedAccessKey_name": {
-            "defaultValue": "LogzioMetricsSharedAccessKey",
+            "defaultValue": "LogzioMSharedAccessKey",
             "type": "String"
         },
         "consumergroups_$Default_metrics_name": {
