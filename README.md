@@ -65,3 +65,7 @@ If you're not sure how to do this, see [Stream Azure monitoring data to an event
 
 Give your data some time to get from your system to ours, and then open Logz.io.
 If everything went according to plan, you should see logs with the type `eventhub` in Kibana and metrics in Grafana.
+
+## Changelog
+
+- 1.1.0: Switch to independent deploy for metrics and logs.
