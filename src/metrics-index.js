@@ -1,4 +1,4 @@
-const metricsProcessor = require('../SharedCode/mainIndex');
+const metricsProcessor = require('./core');
 
 module.exports = function processEventHubMessages(context, eventHubMessages) {
   metricsProcessor(context, eventHubMessages, {

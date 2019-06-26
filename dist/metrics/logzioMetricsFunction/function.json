@@ -7,7 +7,7 @@
        "path": "insights-operational-metrics",
        "connection": "AzureEventHubMetricsConnectionString",
        "cardinality": "many",
-       "consumerGroup": "LogzioMetricsConsumerGroup"
+       "consumerGroup": "LogzioMConsumerGroup"
      },
      {
        "connection": "MetricsStorageConnectionString",

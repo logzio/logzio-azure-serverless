@@ -7,9 +7,11 @@ At the end of this process, your Azure function will forward logs from an Azure 
 
 ### 1. Deploy the Logz.io template
 
-👇 Click this button to load the Logz.io template in Azure.
+👇 Choose a Logz.io template to load in Azure.
 
-[![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Flogzio%2Flogzio-azure-serverless%2Fmaster%2Fazuredeploy.json)
+| Logs | Metrics |
+|---|---|
+| [![Deploy to Azure](https://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Flogzio%2Flogzio-azure-serverless%2Fmaster%2Fdeployments%2Fazuredeploylogs.json) | [![Deploy to Azure](https://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Flogzio%2Flogzio-azure-serverless%2Fmaster%2Fdeployments%2Fazuredeploymetrics.json) |
 
 
 ### 2. Configure the template
@@ -63,3 +65,7 @@ If you're not sure how to do this, see [Stream Azure monitoring data to an event
 
 Give your data some time to get from your system to ours, and then open Logz.io.
 If everything went according to plan, you should see logs with the type `eventhub` in Kibana and metrics in Grafana.
+
+## Changelog
+
+- 1.1.0: Switch to independent deploy for metrics and logs.
