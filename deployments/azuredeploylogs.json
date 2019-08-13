@@ -83,7 +83,7 @@
             "location": "[resourceGroup().location]",
             "scale": null,
             "properties": {
-                "supportsHttpsTrafficOnly": false,
+                "supportsHttpsTrafficOnly": true,
                 "encryption": {
                     "services": {
                         "file": {
@@ -110,6 +110,7 @@
             "location": "[resourceGroup().location]",
             "scale": null,
             "properties": {
+                "supportsHttpsTrafficOnly": true,
                 "encryption": {
                     "services": {
                         "file": {
@@ -161,6 +162,7 @@
                 "enabled": true,
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_LogzioLogsSP_name'))]",
                 "reserved": false,
+                "httpsOnly": true,
                 "siteConfig": {
                     "appSettings": [{
                             "name": "FUNCTIONS_EXTENSION_VERSION",
