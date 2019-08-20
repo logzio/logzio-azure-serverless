@@ -79,11 +79,9 @@
             },
             "kind": "Storage",
             "name": "[parameters('storageAccounts_LogzioMetricsFailSafe_name')]",
-            "apiVersion": "2017-06-01",
+            "apiVersion": "2019-04-01",
             "location": "[resourceGroup().location]",
-            "scale": null,
             "properties": {
-                "supportsHttpsTrafficOnly": true,
                 "encryption": {
                     "services": {
                         "file": {
@@ -106,11 +104,9 @@
             },
             "kind": "Storage",
             "name": "[parameters('storageAccounts_LogzioMetricsAppStorage_name')]",
-            "apiVersion": "2017-06-01",
+            "apiVersion": "2019-04-01",
             "location": "[resourceGroup().location]",
-            "scale": null,
             "properties": {
-                "supportsHttpsTrafficOnly": true,
                 "encryption": {
                     "services": {
                         "file": {
