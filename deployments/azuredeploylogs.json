@@ -81,7 +81,6 @@
             "name": "[parameters('storageAccounts_LogzioLogsFailSafe_name')]",
             "apiVersion": "2019-04-01",
             "location": "[resourceGroup().location]",
-            "scale": null,
             "properties": {
                 "encryption": {
                     "services": {
@@ -107,7 +106,6 @@
             "name": "[parameters('storageAccounts_LogzioLogsAppStorage_name')]",
             "apiVersion": "2019-04-01",
             "location": "[resourceGroup().location]",
-            "scale": null,
             "properties": {
                 "encryption": {
                     "services": {
