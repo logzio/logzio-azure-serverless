@@ -79,11 +79,9 @@
             },
             "kind": "Storage",
             "name": "[parameters('storageAccounts_LogzioMetricsFailSafe_name')]",
-            "apiVersion": "2017-06-01",
+            "apiVersion": "2019-04-01",
             "location": "[resourceGroup().location]",
-            "scale": null,
             "properties": {
-                "supportsHttpsTrafficOnly": false,
                 "encryption": {
                     "services": {
                         "file": {
@@ -106,9 +104,8 @@
             },
             "kind": "Storage",
             "name": "[parameters('storageAccounts_LogzioMetricsAppStorage_name')]",
-            "apiVersion": "2017-06-01",
+            "apiVersion": "2019-04-01",
             "location": "[resourceGroup().location]",
-            "scale": null,
             "properties": {
                 "encryption": {
                     "services": {
@@ -161,6 +158,7 @@
                 "enabled": true,
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_LogzioMetricsSP_name'))]",
                 "reserved": false,
+                "httpsOnly": true,
                 "siteConfig": {
                     "appSettings": [{
                             "name": "FUNCTIONS_EXTENSION_VERSION",
