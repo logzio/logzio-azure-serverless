@@ -83,15 +83,6 @@ Make sure to use these settings:
 * **Metrics listener host**: Use your the listener URL for your metrics account region (default: `listener.logz.io`).
 * **Metrics account token**: Use the [token](https://app.logz.io/#/dashboard/settings/general) of the metrics account you want to ship to.
 
-
-| Parameter | Description |
-|---|---|
-| Resource group | Create a new resource group or select your existing one, and then click **OK**. |
-| Location | Select the same region as the Azure services that will stream data to this event hub. |
-| Logs listener host | Use the listener URL specific to the region of your Logz.io account. You can look it up [here](https://docs.logz.io/user-guide/accounts/account-region.html). |
-| Logs account token (Default: | Add the [log shipping token](https://app.logz.io/#/dashboard/settings/general) for the relevant Logz.io account. This is the account you want to ship to.  |
-| Format (Default: text) | Select one of the supported parsing formats: json/csv/text  |
-
 At the bottom of the page, select **I agree to the terms and conditions stated above**, and then click **Purchase** to deploy.
 
 Deployment can take a few minutes.
