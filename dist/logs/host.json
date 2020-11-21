@@ -1,5 +1,10 @@
 {
     "functionTimeout": "00:05:00",
+    "version": "2.0",
+    "extensionBundle": {
+      "id": "Microsoft.Azure.Functions.ExtensionBundle",
+      "version": "[2.*, 3.0.0)"
+    },
     "eventHub": {
         "maxBatchSize": 64,
         "prefetchCount": 256,
@@ -8,4 +13,5 @@
     "functions": [
         "logzioLogsFunction"
     ]
-}
+  }
+  

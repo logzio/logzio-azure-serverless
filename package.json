@@ -19,6 +19,9 @@
     "url": "git+https://github.com/logzio/logzio-azure-serverless.git"
   },
   "author": "ido halevi",
+  "contributors": [
+    "roni.shaham@logz.io"
+  ],
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/logzio/logzio-azure-serverless/issues"
