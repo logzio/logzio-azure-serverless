@@ -17,56 +17,23 @@
             "defaultValue": 180000,
             "type": "int"
         },
-        "ParseEmptyFileds": {
+        "ParseEmptyFields": {
             "defaultValue": "false",
             "type": "string"
         }
     },
     "variables": {
-        "sites_logzioLogsFunctionApp_name": {
-            "defaultValue": "[concat('logzioLFunctionApp', uniqueString(resourceGroup().id))]",
-            "type": "String"
-        },
-        "storageAccountsLogzioFailSafe": {
-            "defaultValue": "[concat('logsbackup', uniqueString(resourceGroup().id))]",
-            "type": "String"
-        },
-        "namespaces_LogzioLogsNS_name": {
-            "defaultValue": "[concat('LogzioLNS', uniqueString(resourceGroup().id))]",
-            "type": "String"
-        },
-        "serverfarms_LogzioLogsSP_name": {
-            "defaultValue": "[concat('logzioLAppServicePlan', uniqueString(resourceGroup().id))]",
-            "type": "String"
-        },
-        "storageAccounts_LogzioLogsAppStorage_name": {
-            "defaultValue": "[concat('logzllog', uniqueString(resourceGroup().id))]",
-            "type": "String"
-        },
-        "EventhubLogsName": {
-            "defaultValue": "logzioeventhub",
-            "type": "String"
-        },
-        "AuthorizationRules_LogzioLogsSharedAccessKey_name": {
-            "defaultValue": "LogzioLSharedAccessKey",
-            "type": "String"
-        },
-        "ConsumergroupsLogsName": {
-            "defaultValue": "LogzioLConsumerGroup",
-            "type": "String"
-        },
-        "AppInsightsName": {
-            "defaultValue": "[concat('logzioInsight', uniqueString(resourceGroup().id))]",
-            "type": "String"
-        },
-        "repoURL": {
-            "defaultValue": "https://github.com/logzio/logzio-azure-serverless.git",
-            "type": "String"
-        },
-        "branch": {
-            "defaultValue": "master",
-            "type": "String"
-        }
+        "sites_logzioLogsFunctionApp_name": "[concat('logzioLFunctionApp', uniqueString(resourceGroup().id))]",
+        "storageAccountsLogzioFailSafe": "[concat('logsbackup', uniqueString(resourceGroup().id))]",
+        "namespaces_LogzioLogsNS_name": "[concat('LogzioLNS', uniqueString(resourceGroup().id))]",
+        "serverfarms_LogzioLogsSP_name": "[concat('logzioLAppServicePlan', uniqueString(resourceGroup().id))]",
+        "storageAccounts_LogzioLogsAppStorage_name": "[concat('logzllog', uniqueString(resourceGroup().id))]",
+        "EventhubLogsName": "logzioeventhub",
+        "AuthorizationRules_LogzioLogsSharedAccessKey_name": "LogzioLSharedAccessKey",
+        "ConsumergroupsLogsName": "LogzioLConsumerGroup",
+        "AppInsightsName": "[concat('logzioInsight', uniqueString(resourceGroup().id))]",
+        "repoURL": "https://github.com/logzio/logzio-azure-serverless.git",
+        "branch": "master"
     },
     "resources": [{
             "type": "Microsoft.EventHub/namespaces",
@@ -229,8 +196,8 @@
                             "value": "[parameters('Timeout')]"
                         },
                         {
-                            "name": "ParseEmptyFileds",
-                            "value": "[parameters('ParseEmptyFileds')]"
+                            "name": "ParseEmptyFields",
+                            "value": "[parameters('ParseEmptyFields')]"
                         },
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -238,7 +205,7 @@
                         },
                         {
                             "name": "WEBSITE_NODE_DEFAULT_VERSION",
-                            "value": "~10"
+                            "value": "~12"
                         }
                     ]
                 }

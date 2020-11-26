@@ -3,12 +3,14 @@
 This repo contains the code and instructions you'll need to ship logs and metrics from your Azure services to Logz.io.
 At the end of this process, your Azure function will forward logs or metrics from an Azure Event Hub to your Logz.io account.
 
+![Integration-architecture](img/logzio-evethub-Diagram.png)
+
 ## Setting log shipping from Azure
 
 * Shipping [logs](#logs)
 * Shipping [metrics](#metrics)
 
-<div class="logs">
+<div id="logs">
 
 ## Sending Logs
 
@@ -16,6 +18,14 @@ At the end of this process, your Azure function will forward logs or metrics fro
 
 
 [![Deploy to Azure](https://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Flogzio%2Flogzio-azure-serverless%2Fmaster%2Fdeployments%2Fazuredeploylogs.json)
+
+This deployment will create the following services:
+* Serveless Function App
+* Event Hubs Namspace
+* Function's logs Storage Account
+* Back up Storage Account for failed shipping
+* App Service Plan
+* Application Insights
 
 
 ### 2. Configure the template
@@ -30,7 +40,7 @@ Make sure to use these settings:
 | Logs listener host* (Default: `listener.logz.io`)| Use the listener URL specific to the region of your Logz.io account. You can look it up [here](https://docs.logz.io/user-guide/accounts/account-region.html). |
 | buffersize (Default: 100) | The maximum number of messages the logger will accumulate before sending them all as a bulk  |
 | timeout (Default: 180,000 = 3 minutes) | The read/write/connection timeout in *milliseconds*.  |
-| ParseEmptyFileds (Default: False) | There are Azure's services logs that features empty fields and will not be parsed in Kibana. If you wish to parse those logs insert the value 'true'. **Please note using this option may slow the shipper's perfomance.** |
+| ParseEmptyFields (Default: False) | There are Azure's services logs that features empty fields and will not be parsed in Kibana. If you wish to parse those logs insert the value 'true'. **Please note using this option may slow the shipper's perfomance.** |
 
 *Required fields.  
 
@@ -41,7 +51,11 @@ Deployment can take a few minutes.
 ### 3. Stream Azure service data to your new event hubs
 
 Now that you've set it up, configure Azure to stream service logs to your new event hubs so that your new function apps can forward that data to Logz.io.
-To send your data to this event hub choose your service type and create diagnostic settings for it, for more information see [Stream Azure monitoring data to an event hub for consumption by an external tool](https://docs.microsoft.com/en-us/azure/monitoring-and-diagnostics/monitor-stream-monitoring-data-event-hubs) from Microsoft.
+To send your data to this event hub choose your service type and create diagnostic settings for it.  
+Under 'Event hub policy name' choose 'LogzioLSharedAccessKey'.  
+For more information see [Stream Azure monitoring data to an event hub for consumption by an external tool](https://docs.microsoft.com/en-us/azure/monitoring-and-diagnostics/monitor-stream-monitoring-data-event-hubs) from Microsoft.
+
+![Diagnostic-settings](img/diagnostic-settings.png)
 
 ### 4. Check Logz.io for your logs
 
@@ -64,7 +78,7 @@ You'll have the option to edit the following values:
 
 </div>
 
-<div class="metrics">
+<div id="metrics">
 
 ## Sending Metrics
 

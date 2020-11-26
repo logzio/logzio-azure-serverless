@@ -5,7 +5,7 @@ const fs = require('fs');
 const util = require('util');
 const appendFileAsync = util.promisify(fs.appendFile);
 const containerName = 'logziologsbackupcontainer';
-const updateTimestamp = log => {
+const addTimestampIfNotExists = log => {
     if (log.time) {
         return {
             ...log,
@@ -19,9 +19,6 @@ const updateFolderSize = () => {
     const fileSizeInKb = stats.size / 1000;
     folderSize += fileSizeInKb;
 }
-const arrayIsEmpty = array => {
-    return Array.isArray(array) && array.length == 0;
-};
 const getDate = () => {
     const dateObj = new Date();
     const month = dateObj.getUTCMonth() + 1; //months from 1-12
@@ -34,22 +31,21 @@ const uniqString = () => {
         .toString(36)
         .substring(7);
 };
-const createFolderName = () => {
+const createNewFolder = () => {
     const newFolderName = getDate() + '-' + uniqString();
     fs.mkdir(newFolderName, { recursive: true }, err => {
-        if (err) throw err;
+        if (err) context.log.error(err);
     });
     return newFolderName;
 };
-let folderName = createFolderName();
+let folderName = createNewFolder();
 let fileName = '';
 const workingDir = process.cwd();
 const createFileName = (context) => {
     fileName = 'logs-'.concat(uniqString()).concat('.txt');
     return fileName;
 };
-const maxBatchSize = 100;
-const MB = 1000;
+const maxShipperBulkSize = 100;
 let folderSize = 0;
 let logIndex = 1;
 const isObject = obj => {
@@ -66,88 +62,77 @@ const deleteEmptyFields = obj => {
     }
 };
 const getCallBackFunction = context => {
-    return function callback(err, bulk) {
+    return function callback(err) {
         if (err) {
-            context.err(`logzio-logger error: ${err}`, err);
+            context.log.error(`logzio-logger error: ${err}`);
         }
         context.log('Done.');
         context.done();
     };
 };
-const getParserOptions = () => {
-    return {
-        token: process.env.LogzioLogsToken,
-        host: process.env.LogzioLogsHost,
-        bufferSize: Number(process.env.BufferSize),
-        timeout: Number(process.env.Timeout),
-    };
-};
-const getContainerDetails = () => {
-    return {
+const getParserOptions = () => ({
+  token: process.env.LogzioLogsToken,
+  host: process.env.LogzioLogsHost,
+  bufferSize: Number(process.env.BufferSize),
+  timeout: Number(process.env.Timeout),
+});
+
+const getContainerDetails = () => ({
         storageConnectionString: process.env.LogsStorageConnectionString,
         containerName: containerName,
-    };
-};
-const deleteDirsWithFiles = (foldersToDelete, context) => {
+});
+
+const deleteDirectoriesRecursively = (foldersToDelete, context) => {
     foldersToDelete.forEach(folderPath => {
-        fs.rmdirSync(folderPath, { recursive: true });
+          fs.rmdirSync(folderPath, { recursive: true });
     })
 }
 
 const uploadFiles = async (containerClient, filesToUpload, context) => {
     try {
-        const promises = [];
+        const uploadingFilesPromises = [];
         for (const file of filesToUpload) {
             const blockBlobClient = containerClient.getBlockBlobClient(file);
-            promises.push(blockBlobClient.uploadFile(file));
+            uploadingFilesPromises.push(blockBlobClient.uploadFile(file));
         }
-        await Promise.all(promises);
-        if (!arrayIsEmpty(filesToUpload)) {
-            context.log('Uploaded logs to back up container.');
-        }
+        await Promise.all(uploadingFilesPromises);
+        if (filesToUpload.length !== 0) {
+          context.log('Uploaded logs to back up container.');
+        } 
     } catch (error) {
-        context.log('Error: ', error);
+        context.log.error(error);
     }
 };
 const writeEventToBlob = async (event, filesToUpload, foldersToDelete, context) => {
-    if (logIndex >= maxBatchSize) {
+    if (logIndex >= maxShipperBulkSize) {
         fileName = createFileName();
         updateFolderSize();
         logIndex = 1;
     } else {
         logIndex++;
         const eventWithNewLine = JSON.stringify(event).concat('\n');
-        const concatFolderToFile = folderName + "\\" + fileName;
-        const filePath = workingDir + "\\" + concatFolderToFile;
+        const concatFolderToFile = `${folderName}\\${fileName}`;
+        const fileFullPath = `${workingDir}\\${concatFolderToFile}`;
         try {
-            await appendFileAsync(filePath, eventWithNewLine);
-            pushFileToUploadAsync(filesToUpload, concatFolderToFile, context);
-            pushFolderToDeleteAsync(foldersToDelete, folderName, context);
+            await appendFileAsync(fileFullPath, eventWithNewLine);
+            if (!filesToUpload.includes(concatFolderToFile)) { filesToUpload.push(concatFolderToFile); }
+            if (!foldersToDelete.includes(folderName)) { foldersToDelete.push(folderName); }
         }
         catch (e) {
-            context.log(`Error was thrown in appendFile, ${e}`);
+            context.log.error(`Error was thrown in appendFile, ${e}`);
         }
     };
 };
-const pushFileToUploadAsync = (filesToUpload, filePath, context) => {
-    if (!filesToUpload.includes(filePath)) {
-        filesToUpload.push(filePath);
-    }
-}
-const pushFolderToDeleteAsync = (foldersToDelete, folderPath, context) => {
-    if (!foldersToDelete.includes(folderPath)) {
-        foldersToDelete.push(folderPath);
-    }
-}
 
-const updateFolderNameIfFull = () => {
-    if (folderSize >= MB) {
-        folderName = createFolderName();
-        folderSize = 0;
-    }
+const updateFolderNameIfMaxSizeSurpassed = (folderMaxSizeInMB = 1000) => {
+  if (folderSize >= folderMaxSizeInMB) {
+      folderName = createNewFolder();
+      folderSize = 0;
+  }
 }
 
 module.exports = async function processEventHubMessages(context, eventHubs) {
+    try{
     createFileName(context);
     const filesToUpload = [];
     const foldersToDelete = [ folderName ];
@@ -168,19 +153,24 @@ module.exports = async function processEventHubMessages(context, eventHubs) {
         timeout: timeout || 180000,
     });
     eventHubs[0].records.map(async eventHub => {
-        updateTimestamp(eventHub);
-        if (process.env.ParseEmptyFileds == 'true') {
+        addTimestampIfNotExists(eventHub);
+        if (process.env.ParseEmptyFields == 'true') {
             deleteEmptyFields(eventHub);
         }
         try {
             logzioShipper.log(eventHub);
+            throw new Error("errrr");
         } catch (error) {
-            context.log(`Failed to send a log to Logz.io due to the error: '${error}'.\nUploading to backup container: '${containerName}' under the file: '${fileName}'`);
+            context.log.error(`Failed to send a log to Logz.io due to the error: '${error}'. \nUploading to backup container: '${containerName}' in the file: '${fileName}'`);
             await writeEventToBlob(eventHub, filesToUpload, foldersToDelete, context);
-            updateFolderNameIfFull();
+            updateFolderNameIfMaxSizeSurpassed();
         } finally {
             await uploadFiles(containerClient, filesToUpload, context);
-            deleteDirsWithFiles(foldersToDelete, context);
+            deleteDirectoriesRecursively(foldersToDelete, context);
         }
     });
+    }
+    catch(error){
+        context.log.error(error)
+    }
 };
