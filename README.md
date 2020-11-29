@@ -53,6 +53,7 @@ Deployment can take a few minutes.
 Now that you've set it up, configure Azure to stream service logs to your new event hubs so that your new function apps can forward that data to Logz.io.
 To send your data to this event hub choose your service type and create diagnostic settings for it.  
 Under 'Event hub policy name' choose 'LogzioLSharedAccessKey'.  
+This settings may take time to be applied and some of the services may need to be restarted.  
 For more information see [Stream Azure monitoring data to an event hub for consumption by an external tool](https://docs.microsoft.com/en-us/azure/monitoring-and-diagnostics/monitor-stream-monitoring-data-event-hubs) from Microsoft.
 
 ![Diagnostic-settings](img/diagnostic-settings.png)
