@@ -6,7 +6,7 @@
             "defaultValue": "listener.logz.io",
             "type": "String"
         },
-        "LogzioLogsToken": {
+        "LogShippingToken": {
             "type": "String"
         },
         "Buffersize": {
@@ -16,10 +16,6 @@
         "Timeout": {
             "defaultValue": 180000,
             "type": "int"
-        },
-        "ParseEmptyFields": {
-            "defaultValue": "false",
-            "type": "string"
         }
     },
     "variables": {
@@ -33,7 +29,8 @@
         "ConsumergroupsLogsName": "LogzioLConsumerGroup",
         "AppInsightsName": "[concat('logzioInsight', uniqueString(resourceGroup().id))]",
         "repoURL": "https://github.com/logzio/logzio-azure-serverless.git",
-        "branch": "master"
+        "branch": "master",
+        "ParseEmptyFields": "false"
     },
     "resources": [{
             "type": "Microsoft.EventHub/namespaces",
@@ -189,7 +186,7 @@
                         },
                         {
                             "name": "LogzioLogsToken",
-                            "value": "[parameters('LogzioLogsToken')]"
+                            "value": "[parameters('LogShippingToken')]"
                         },
                         {
                             "name": "LogzioLogsHost",
@@ -205,7 +202,7 @@
                         },
                         {
                             "name": "ParseEmptyFields",
-                            "value": "[parameters('ParseEmptyFields')]"
+                            "value": "[variables('ParseEmptyFields')]"
                         },
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",

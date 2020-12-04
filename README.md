@@ -35,12 +35,11 @@ Make sure to use these settings:
 | Parameter | Description |
 |---|---|
 | Resource group* | Create a new resource group or select your existing one, and then click **OK**. |
-| Location* | Select the same region as the Azure services that will stream data to this event hub. |
+| Region* | Select the same region as the Azure services that will stream data to this event hub. |
 | Logs account token* | Add the [log shipping token](https://app.logz.io/#/dashboard/settings/general) for the relevant Logz.io account. This is the account you want to ship to.  |
 | Logs listener host* (Default: `listener.logz.io`)| Use the listener URL specific to the region of your Logz.io account. You can look it up [here](https://docs.logz.io/user-guide/accounts/account-region.html). |
 | buffersize (Default: 100) | The maximum number of messages the logger will accumulate before sending them all as a bulk  |
 | timeout (Default: 180,000 = 3 minutes) | The read/write/connection timeout in *milliseconds*.  |
-| ParseEmptyFields (Default: False) | There are Azure's services logs that features empty fields and will not be parsed in Kibana. If you wish to parse those logs insert the value 'true'. **Please note using this option may slow the shipper's perfomance.** |
 
 *Required fields.  
 
@@ -73,7 +72,7 @@ If you wish to change parameters values after the deployment, go to your functio
 You'll have the option to edit the following values:
 * Shipper's configurations such as LogzioHost, LogzioToken, Buffersize, Timeout.
 * FUNCTIONS_WORKER_PROCESS_COUNT - maximum of 10, for more information press [here](https://docs.microsoft.com/en-us/azure/azure-functions/functions-app-settings#functions_worker_process_count).
-* ParseEmptyField - Parse logs with invalid empty fields. **Please note using this option may slow the shipper's perfomance.**
+* ParseEmptyFields - (Default: False) If you encounter invalid logs of Azure's services that contains empty fields and will not parse in Kibana, you can use this option by changing it's values to 'true'. **Please note using this option may slow the shipper's perfomance.**
 
 ![Function's configuration](img/configuration-settings.png)
 
