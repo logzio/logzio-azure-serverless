@@ -50,6 +50,35 @@ const getContainerDetails = () => ({
   containerName: containerName
 });
 
+const parseLogToMetric = (obj) => {
+  const {
+    metricName,
+  } = obj;
+  if (!metricName) return obj;
+
+  const metricObj = {
+    metrics: {
+      [metricName]: {},
+    },
+    dimensions: {},
+  };
+  Object.keys(obj).forEach((key) => {
+    if (this._availableStatistics.includes(key)) {
+      metricObj.metrics[metricName][key] = obj[key];
+    } else if (key === 'resourceId') {
+      const splitArr = obj[key].split('/');
+      for (let i = 1; i < splitArr.length; i += 2) {
+        metricObj.dimensions[splitArr[i]] = splitArr[i + 1];
+      }
+    } else if (key === '@timestamp') {
+      metricObj[key] = obj[key];
+    } else if (key !== 'metricName') {
+      metricObj.dimensions[key] = obj[key];
+    }
+  });
+  return metricObj;
+}
+
 module.exports = async function processEventHubMessages(context, eventHubs) {
   const callBackFunction = getCallBackFunction(context);
   const { host, token, bufferSize, timeout } = getParserOptions();
@@ -76,9 +105,14 @@ module.exports = async function processEventHubMessages(context, eventHubs) {
   });
 
   eventHubs[0].records.map(async eventHub => {
-    addTimestampIfNotExists(eventHub);
-    if (process.env.ParseEmptyFields == "true") {
+    if (toLower(process.env.ParseEmptyFields) == "true") {
       deleteEmptyFieldsOfLog(eventHub);
+    }
+    if (process.env.DataType == "Metrics") {
+      parseLogToMetric(eventvHub);
+    }
+    else{
+      addTimestampIfNotExists(eventHub);
     }
     try {
       logzioShipper.log(eventHub);
@@ -93,4 +127,6 @@ module.exports = async function processEventHubMessages(context, eventHubs) {
       backupContainer.deleteDirectoriesRecursively();
     }
   });
+
+  await Promise.all(eventHubs[0].records);
 };

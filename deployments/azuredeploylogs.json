@@ -2,6 +2,13 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "DataType": {
+            "type": "string",
+            "allowedValues": [
+                "Metrics",
+                "Logs"
+            ]
+        },
         "LogzioLogsHost": {
             "defaultValue": "listener.logz.io",
             "type": "String"
@@ -154,7 +161,7 @@
                         },
                         {
                             "name": "FUNCTIONS_WORKER_PROCESS_COUNT",
-                            "value": "4"
+                            "value": "10"
                         },
                         {
                             "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
@@ -203,6 +210,10 @@
                         {
                             "name": "ParseEmptyFields",
                             "value": "[variables('ParseEmptyFields')]"
+                        },
+                        {
+                            "name": "DataType",
+                            "value": "[parameters('DataType')]"
                         },
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -260,7 +271,7 @@
             "scale": null,
             "properties": {
                 "messageRetentionInDays": 7,
-                "partitionCount": 12,
+                "partitionCount": 10,
                 "status": "Active",
                 "partitionIds": [
                     "0",
