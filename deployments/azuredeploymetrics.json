@@ -207,7 +207,7 @@
                         },
                         {
                             "name": "DataType",
-                            "value": "[parameters('DataType')]"
+                            "value": "[variables('DataType')]"
                         },
                         {
                             "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
