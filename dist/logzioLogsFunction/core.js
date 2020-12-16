@@ -2,7 +2,7 @@ const { ContainerClient } = require("@azure/storage-blob");
 const logger = require("logzio-nodejs");
 const BackupContainer = require("./backup-container");
 const containerName = "logziologsbackupcontainer";
-
+const availableStatistics = ['count', 'total', 'average', 'maximum', 'minimum'];
 const addTimestampIfNotExists = log => {
   if (log.time) {
     return {
@@ -63,7 +63,7 @@ const parseLogToMetric = (obj) => {
     dimensions: {},
   };
   Object.keys(obj).forEach((key) => {
-    if (this._availableStatistics.includes(key)) {
+    if (availableStatistics.includes(key)) {
       metricObj.metrics[metricName][key] = obj[key];
     } else if (key === 'resourceId') {
       const splitArr = obj[key].split('/');
@@ -103,16 +103,20 @@ module.exports = async function processEventHubMessages(context, eventHubs) {
     internalLogger: context,
     containerClient: containerClient
   });
-
   eventHubs[0].records.map(async eventHub => {
-    if (toLower(process.env.ParseEmptyFields) == "true") {
-      deleteEmptyFieldsOfLog(eventHub);
+    try{
+        if ((process.env.ParseEmptyFields).toLowerCase() == "true") {
+            deleteEmptyFieldsOfLog(eventHub);
+        }
+        if (process.env.DataType == "Metrics") {
+            parseLogToMetric(eventHub);
+        }
+        else{
+            addTimestampIfNotExists(eventHub);
+        }
     }
-    if (process.env.DataType == "Metrics") {
-      parseLogToMetric(eventvHub);
-    }
-    else{
-      addTimestampIfNotExists(eventHub);
+    catch(e){
+        context.log.error(e)
     }
     try {
       logzioShipper.log(eventHub);
@@ -127,6 +131,5 @@ module.exports = async function processEventHubMessages(context, eventHubs) {
       backupContainer.deleteDirectoriesRecursively();
     }
   });
-
   await Promise.all(eventHubs[0].records);
 };

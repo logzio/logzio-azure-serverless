@@ -2,13 +2,6 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "DataType": {
-            "type": "string",
-            "allowedValues": [
-                "Metrics",
-                "Logs"
-            ]
-        },
         "LogzioLogsHost": {
             "defaultValue": "listener.logz.io",
             "type": "String"
@@ -27,14 +20,15 @@
     },
     "variables": {
         "logsFunctionAppName": "[concat('logzioLFunctionApp', uniqueString(resourceGroup().id))]",
-        "backupStorageAccounts": "[concat('logsbackup', uniqueString(resourceGroup().id))]",
+        "backupStorageAccounts": "[concat('logslbackup', uniqueString(resourceGroup().id))]",
         "eventhubNamespace": "[concat('LogzioLNS', uniqueString(resourceGroup().id))]",
         "functionServerfarms": "[concat('logzioLAppServicePlan', uniqueString(resourceGroup().id))]",
         "logzioAppStorageAccounts": "[concat('logzllog', uniqueString(resourceGroup().id))]",
         "EventhubLogsName": "logzioeventhub",
         "AuthorizationRulesSharedAccessKey": "LogzioLSharedAccessKey",
         "ConsumergroupsLogsName": "LogzioLConsumerGroup",
-        "AppInsightsName": "[concat('logzioInsight', uniqueString(resourceGroup().id))]",
+        "AppInsightsName": "[concat('logzioLInsight', uniqueString(resourceGroup().id))]",
+        "DataType": "Logs",
         "repoURL": "https://github.com/logzio/logzio-azure-serverless.git",
         "branch": "master",
         "ParseEmptyFields": "false"
@@ -173,7 +167,7 @@
                         }, 
                         {
                             "name": "Project",
-                            "value": "dist/logs/"
+                            "value": "dist/"
                         },
                         {
                             "name": "AzureWebJobsStorage",
