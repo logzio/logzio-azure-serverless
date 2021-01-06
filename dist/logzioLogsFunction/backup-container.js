@@ -23,7 +23,6 @@ class BackupContainer {
     const stats = fs.statSync(this.currentFile);
     const fileSizeInKb = stats.size / 1000;
     this._folderSize += fileSizeInKb;
-    this._context.log(folderSize)
   }
 
   _getDate() {
@@ -43,7 +42,7 @@ class BackupContainer {
   async _createNewFolder() {
     const newFolderName = this._getDate() + "-" + this._uniqString();
     fs.mkdir(newFolderName, { recursive: true }, err => {
-      if (err) context.log.error(err);
+      if (err) this._context.log.error(err);
     });
     this._folderSize = 0;
     this.currentFolder = newFolderName;

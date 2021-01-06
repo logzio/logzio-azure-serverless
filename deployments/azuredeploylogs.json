@@ -12,10 +12,6 @@
         "Buffersize": {
             "defaultValue": 100,
             "type": "int"
-        },
-        "Timeout": {
-            "defaultValue": 180000,
-            "type": "int"
         }
     },
     "variables": {
@@ -106,7 +102,7 @@
             "type": "Microsoft.Web/serverfarms",
             "sku": {
                 "name": "Y1",
-                "tier": "Dynamic",
+                "tier": "S1",
                 "size": "Y1",
                 "family": "Y",
                 "capacity": 0
@@ -196,10 +192,6 @@
                         {
                             "name": "Buffersize",
                             "value": "[parameters('Buffersize')]"
-                        },
-                        {
-                            "name": "Timeout",
-                            "value": "[parameters('Timeout')]"
                         },
                         {
                             "name": "ParseEmptyFields",

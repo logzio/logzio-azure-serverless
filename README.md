@@ -34,7 +34,6 @@ Make sure to use these settings:
 | Shipping token* | Add the [logs shipping token](https://app.logz.io/#/dashboard/settings/general) or [metrics shipping token](https://docs.logz.io/user-guide/accounts/finding-your-metrics-account-token/) for the relevant Logz.io account. This is the account you want to ship to.  |
 | Logs listener host* (Default: `listener.logz.io`)| Use the listener URL specific to the region of your Logz.io account. You can look it up [here](https://docs.logz.io/user-guide/accounts/account-region.html). |
 | buffersize (Default: 100) | The maximum number of messages the logger will accumulate before sending them all as a bulk  |
-| timeout (Default: 180,000 = 3 minutes) | The read/write/connection timeout in *milliseconds*.  |
 
 *Required fields.  
 
@@ -54,12 +53,13 @@ For more information see [Stream Azure monitoring data to an event hub for consu
 
 ### 4. For metrics data only - Building rollups config
 
-Contact support to request a custom rollups config
+**Contact support to request a custom rollups config.**  
 Your Metrics account offers 18 month retention, by default. This is to allow you to establish your baseline and make comparisons over a substantial time frame.
 
 Data rollups are used to compress the data without losing the original extremes. The original max, min, and average values are kept so you can graph the data more accurately despite its compression. For more information and the list of default configs, see Rollups.
 
-To kick off this process, email Support to request a custom rollups config.
+To kick off this process, email Support to request a custom rollups config,
+help@logz.io.
 
 Include the following details in your message:
 
@@ -81,7 +81,7 @@ This deployment will also back up your data in case of connection or shipping er
 
 If you wish to change parameters values after the deployment, go to your function app page, then on the left menu press the 'Configuration' tab.
 You'll have the option to edit the following values:
-* Shipper's configurations such as LogzioHost, LogzioToken, Buffersize, Timeout.
+* Shipper's configurations such as LogzioHost, LogzioToken, Buffersize.
 * FUNCTIONS_WORKER_PROCESS_COUNT - maximum of 10, for more information press [here](https://docs.microsoft.com/en-us/azure/azure-functions/functions-app-settings#functions_worker_process_count).
 * ParseEmptyFields - (Default: False) If you encounter invalid logs of Azure's services that contains empty fields and will not parse in Kibana, you can use this option by changing it's values to 'true'. **Please note using this option may slow the shipper's perfomance.**
 
