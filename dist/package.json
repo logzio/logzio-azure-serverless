@@ -6,9 +6,13 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "ido.h@logz.io",
+  "author": "ido.halevi@logz.io",
+  "contributors": [
+    "roni.shaham@logz.io"
+  ],
   "license": "ISC",
   "dependencies": {
-    "logzio-nodejs": "^1.0.5"
+    "@azure/storage-blob": "^12.2.1",
+    "logzio-nodejs": "^2.0.2"
   }
 }
