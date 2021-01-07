@@ -22,7 +22,7 @@
         "logzioAppStorageAccounts": "[concat('logzmlog', uniqueString(resourceGroup().id))]",
         "EventhubLogsName": "logzioeventhub",
         "AuthorizationRulesSharedAccessKey": "LogzioMSharedAccessKey",
-        "ConsumergroupsLogsName": "LogzioMConsumerGroup",
+        "ConsumergroupsLogsName": "LogzioLConsumerGroup",
         "AppInsightsName": "[concat('logzioMInsight', uniqueString(resourceGroup().id))]",
         "DataType": "Metrics",
         "repoURL": "https://github.com/logzio/logzio-azure-serverless.git",
