@@ -57,7 +57,7 @@
                 "tier": "Standard",
                 "capacity": 1
             },
-            "name": "[parameters('eventhubNamespace')]",
+            "name": "[parameters('EventhubNamespace')]",
             "apiVersion": "2018-01-01-preview",
             "location": "[resourceGroup().location]",
             "tags": {},
@@ -129,12 +129,12 @@
                 "capacity": 0
             },
             "kind": "serverfarm",
-            "name": "[parameters('functionServerfarms')]",
+            "name": "[parameters('FunctionServerfarms')]",
             "apiVersion": "2020-06-01",
             "location": "[resourceGroup().location]",
             "scale": null,
             "properties": {
-                "name": "[parameters('functionServerfarms')]",
+                "name": "[parameters('FunctionServerfarms')]",
                 "workerTierName": null,
                 "adminSiteName": null,
                 "hostingEnvironmentProfile": null,
@@ -154,7 +154,7 @@
             "scale": null,
             "properties": {
                 "enabled": true,
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('functionServerfarms'))]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('FunctionServerfarms'))]",
                 "reserved": false,
                 "httpsOnly": true,
                 "siteConfig": {
@@ -196,7 +196,7 @@
                         },
                         {
                             "name": "AzureEventHubLogsConnectionString",
-                            "value": "[listkeys(resourceId('Microsoft.EventHub/namespaces/authorizationRules', parameters('eventhubNamespace'), parameters('AuthorizationRulesSharedAccessKey')), '2017-04-01').primaryConnectionString]"
+                            "value": "[listkeys(resourceId('Microsoft.EventHub/namespaces/authorizationRules', parameters('EventhubNamespace'), parameters('AuthorizationRulesSharedAccessKey')), '2017-04-01').primaryConnectionString]"
                         },
                         {
                             "name": "ConsumergroupsLogsName",
@@ -255,15 +255,15 @@
                 }
             }],
             "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', parameters('functionServerfarms'))]",
+                "[resourceId('Microsoft.Web/serverfarms', parameters('FunctionServerfarms'))]",
                 "[resourceId('Microsoft.Storage/storageAccounts', parameters('logzioAppStorageAccounts'))]",
-                "[concat('Microsoft.EventHub/namespaces/', parameters('eventhubNamespace'))]",
+                "[concat('Microsoft.EventHub/namespaces/', parameters('EventhubNamespace'))]",
                 "[resourceId('Microsoft.Insights/components', parameters('appInsightsName'))]"
             ]
         },
         {
             "type": "Microsoft.EventHub/namespaces/AuthorizationRules",
-            "name": "[concat(parameters('eventhubNamespace'), '/', parameters('AuthorizationRulesSharedAccessKey'))]",
+            "name": "[concat(parameters('EventhubNamespace'), '/', parameters('AuthorizationRulesSharedAccessKey'))]",
             "apiVersion": "2017-04-01",
             "location": "[resourceGroup().location]",
             "scale": null,
@@ -275,12 +275,12 @@
                 ]
             },
             "dependsOn": [
-                "[resourceId('Microsoft.EventHub/namespaces', parameters('eventhubNamespace'))]"
+                "[resourceId('Microsoft.EventHub/namespaces', parameters('EventhubNamespace'))]"
             ]
         },
         {
             "type": "Microsoft.EventHub/namespaces/eventhubs",
-            "name": "[concat(parameters('eventhubNamespace'), '/', parameters('EventhubLogsName'))]",
+            "name": "[concat(parameters('EventhubNamespace'), '/', parameters('EventhubLogsName'))]",
             "apiVersion": "2017-04-01",
             "location": "[resourceGroup().location]",
             "scale": null,
@@ -296,19 +296,19 @@
                 ]
             },
             "dependsOn": [
-                "[resourceId('Microsoft.EventHub/namespaces', parameters('eventhubNamespace'))]"
+                "[resourceId('Microsoft.EventHub/namespaces', parameters('EventhubNamespace'))]"
             ]
         },
         {
             "type": "Microsoft.EventHub/namespaces/eventhubs/consumergroups",
-            "name": "[concat(parameters('eventhubNamespace'), '/', parameters('EventhubLogsName'), '/', parameters('ConsumergroupsLogsName'))]",
+            "name": "[concat(parameters('EventhubNamespace'), '/', parameters('EventhubLogsName'), '/', parameters('ConsumergroupsLogsName'))]",
             "apiVersion": "2017-04-01",
             "location": "[resourceGroup().location]",
             "scale": null,
             "properties": {},
             "dependsOn": [
-                "[resourceId('Microsoft.EventHub/namespaces', parameters('eventhubNamespace'))]",
-                "[resourceId('Microsoft.EventHub/namespaces/eventhubs', parameters('eventhubNamespace'), parameters('EventhubLogsName'))]"
+                "[resourceId('Microsoft.EventHub/namespaces', parameters('EventhubNamespace'))]",
+                "[resourceId('Microsoft.EventHub/namespaces/eventhubs', parameters('EventhubNamespace'), parameters('EventhubLogsName'))]"
             ]
         },
         {
