@@ -92,7 +92,7 @@ You'll have the option to edit the following values:
 </div>
 
 ## Changelog
-
+- 2.0.1: Dynacamic parameters of 'function.json'.
 - 2.0.0: Update function app version 3.x (Node 12).
     * Back up container for failures.
     * Builds insights on deployment.
