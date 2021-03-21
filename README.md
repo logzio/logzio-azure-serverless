@@ -35,6 +35,8 @@ Make sure to use these settings:
 | Logs listener host* (Default: `listener.logz.io`)| Use the listener URL specific to the region of your Logz.io account. You can look it up [here](https://docs.logz.io/user-guide/accounts/account-region.html). |
 | buffersize (Default: 100) | The maximum number of messages the logger will accumulate before sending them all as a bulk  |
 
+For all other parameters; to use your existing services, change the parameter to the relevant service's name. Otherwise, the template will build the necessary services automatically.
+
 *Required fields.  
 
 At the bottom of the page, select **Review + Create**, and then click **Create** to deploy.
