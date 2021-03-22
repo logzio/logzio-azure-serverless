@@ -2,11 +2,11 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "LogzioLogsHost": {
+        "LogzioHost": {
             "defaultValue": "listener.logz.io",
             "type": "String"
         },
-        "LogsShippingToken": {
+        "MetricsShippingToken": {
             "type": "String"
         },
         "Buffersize": {
@@ -22,7 +22,7 @@
             "type": "string"
         },
         "ConsumergroupsLogsName": {
-            "defaultValue":"LogzioLConsumerGroup",
+            "defaultValue":"LogzioMConsumerGroup",
             "type": "string"
         },
         "FunctionServerfarms": {
