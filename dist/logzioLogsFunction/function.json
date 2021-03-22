@@ -1,14 +1,15 @@
 {
   "entryPoint": "processEventHubMessages",
   "disabled": false,
-  "bindings": [{
-      "type": "eventHubTrigger",
+  "bindings": [
+    {
       "name": "eventHubMessages",
-      "direction": "in",
-      "eventHubName": "logzioeventhub",
       "connection": "AzureEventHubLogsConnectionString",
+      "eventHubName": "%EventhubLogsName%",
+      "consumerGroup": "%ConsumergroupsLogsName%",
       "cardinality": "many",
-      "consumerGroup": "LogzioLConsumerGroup"
+      "direction": "in",
+      "type": "eventHubTrigger"
     }
   ]
 }

@@ -1,13 +1,13 @@
 {
   "name": "logzio-azure-serverless",
-  "version": "1.1.0",
+  "version": "2.0.1",
   "description": "This is a Logz.io Azure function that connects to eventHub",
   "main": "index.js",
   "scripts": {
     "lint": "eslint",
     "test": "jest",
     "watch": "jest --watch",
-    "build": "sh build.sh"
+    "build": ""
   },
   "husky": {
     "hooks": {
