@@ -29,7 +29,7 @@
   "homepage": "https://github.com/logzio/logzio-azure-serverless#readme",
   "dependencies": {
     "acorn": "^8.0.4",
-    "jest": "^24.8.0",
+    "jest": "^25.0.0",
     "logzio-nodejs": "^2.0.2",
     "nock": "10.0.6"
   },
