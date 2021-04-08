@@ -30,7 +30,7 @@
             "defaultValue": "LogzioMSharedAccessKey",
             "type": "String"
         },
-        "consumergroups_$Default_metrics_name": {
+        "ConsumergroupsMetricsName": {
             "defaultValue": "LogzioMConsumerGroup",
             "type": "String"
         },
@@ -262,7 +262,7 @@
         },
         {
             "type": "Microsoft.EventHub/namespaces/eventhubs/consumergroups",
-            "name": "[concat(parameters('namespaces_LogzioMetricsNS_name'), '/', parameters('eventhubs_insights_operational_metrics_name'), '/', parameters('consumergroups_$Default_metrics_name'))]",
+            "name": "[concat(parameters('namespaces_LogzioMetricsNS_name'), '/', parameters('eventhubs_insights_operational_metrics_name'), '/', parameters('ConsumergroupsMetricsName'))]",
             "apiVersion": "2017-04-01",
             "location": "[resourceGroup().location]",
             "scale": null,

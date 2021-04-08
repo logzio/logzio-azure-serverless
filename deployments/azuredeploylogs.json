@@ -30,10 +30,6 @@
             "defaultValue": "LogzioLSharedAccessKey",
             "type": "String"
         },
-        "consumergroups_$Default_logs_name": {
-            "defaultValue": "LogzioLConsumerGroup",
-            "type": "String"
-        },
         "repoURL": {
             "defaultValue": "https://github.com/logzio/logzio-azure-serverless.git",
             "type": "String"
@@ -49,6 +45,10 @@
         "LogzioLogsToken": {
             "defaultValue": "Your Logzio logs account token",
             "type": "String"
+        },
+		"ConsumergroupsLogsName": {
+            "defaultValue":"LogzioLConsumerGroup",
+            "type": "string"
         }
     },
     "variables": {},
@@ -262,7 +262,7 @@
         },
         {
             "type": "Microsoft.EventHub/namespaces/eventhubs/consumergroups",
-            "name": "[concat(parameters('namespaces_LogzioLogsNS_name'), '/', parameters('eventhubs_insights_operational_logs_name'), '/', parameters('consumergroups_$Default_logs_name'))]",
+            "name": "[concat(parameters('namespaces_LogzioLogsNS_name'), '/', parameters('eventhubs_insights_operational_logs_name'), '/', parameters('ConsumergroupsLogsName'))]",
             "apiVersion": "2017-04-01",
             "location": "[resourceGroup().location]",
             "scale": null,
