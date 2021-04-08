@@ -39,7 +39,7 @@
             "type": "String"
         },
         "branch": {
-            "defaultValue": "master",
+            "defaultValue": "function-v1",
             "type": "String"
         },
         "LogzioMetricsHost": {
