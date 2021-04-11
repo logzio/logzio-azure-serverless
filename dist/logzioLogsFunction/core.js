@@ -78,7 +78,7 @@ const parseLogToMetric = obj => {
 };
 
 const addDataToLog = (log, context) => {
-  let eventhubLog = {};
+  let eventhubLog;
   try {
     if (process.env.ParseEmptyFields.toLowerCase() == "true") {
       eventhubLog = deleteEmptyFieldsOfLog(log);
@@ -88,10 +88,10 @@ const addDataToLog = (log, context) => {
     } else {
       eventhubLog = addTimestampIfNotExists(log);
     }
-  } catch (e) {
-    context.log.error(e);
+  } catch (error) {
+    context.log.error(error);
   }
-  return eventhubLog;
+  return eventhubLog || log;
 };
 
 
