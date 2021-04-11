@@ -86,7 +86,7 @@ const addDataToLog = (log, context) => {
     if (process.env.DataType == "Metrics") {
       eventhubLog = parseLogToMetric(log);
     } else {
-      eventhubLog = addTimestampIfNotExists(log);
+    //   eventhubLog = addTimestampIfNotExists(log);
     }
   } catch (e) {
     context.log.error(e);
@@ -99,7 +99,6 @@ const sendLog = async (log, logzioShipper, backupContainer, context) =>{
   log = addDataToLog(log, context);
   try {
     logzioShipper.log(log);
-    throw new Error("failed")
   } catch (error) {
     await backupContainer.writeEventToBlob(log, error);
     backupContainer.updateFolderIfMaxSizeSurpassed();
@@ -133,14 +132,14 @@ module.exports = async function processEventHubMessages(context, eventHubs) {
     containerClient: containerClient
   });
   try{
-      var eventHubArray = 'records' in eventHubs[0] ? eventHubs[0].records : eventHubs;
+      const eventHubArray = eventHubs[0].hasOwnProperty('records') ? eventHubs[0].records : eventHubs;
       eventHubArray.map(async eventHub => {
           sendLog(eventHub, logzioShipper, backupContainer, context);
       });
       await Promise.all(eventHubArray);
       logzioShipper.sendAndClose(callBackFunction);
   }
-  catch(e){
-      context.log.error(e)
+  catch(error){
+      context.log.error(error)
   }
 };
