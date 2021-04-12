@@ -3,7 +3,7 @@ const logger = require("logzio-nodejs");
 const BackupContainer = require("./backup-container");
 const containerName = "logziologsbackupcontainer";
 const availableStatistics = ["count", "total", "average", "maximum", "minimum"];
-const addTimestampIfNotExists = log => {
+const addTimestamp = log => {
   if (log.time) {
     return {
       ...log,
@@ -86,7 +86,7 @@ const addDataToLog = (log, context) => {
     if (process.env.DataType == "Metrics") {
       eventhubLog = parseLogToMetric(log);
     } else {
-      eventhubLog = addTimestampIfNotExists(log);
+      // eventhubLog = addTimestamp(log);
     }
   } catch (error) {
     context.log.error(error);
@@ -99,6 +99,7 @@ const sendLog = async (log, logzioShipper, backupContainer, context) =>{
   log = addDataToLog(log, context);
   try {
     logzioShipper.log(log);
+
   } catch (error) {
     await backupContainer.writeEventToBlob(log, error);
     backupContainer.updateFolderIfMaxSizeSurpassed();
