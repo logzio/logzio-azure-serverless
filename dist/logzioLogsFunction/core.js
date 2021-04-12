@@ -86,7 +86,7 @@ const addDataToLog = (log, context) => {
     if (process.env.DataType == "Metrics") {
       eventhubLog = parseLogToMetric(log);
     } else {
-      // eventhubLog = addTimestamp(log);
+      eventhubLog = addTimestamp(log);
     }
   } catch (error) {
     context.log.error(error);
