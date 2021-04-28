@@ -99,7 +99,6 @@ const sendLog = async (log, logzioShipper, backupContainer, context) =>{
   log = addDataToLog(log, context);
   try {
     logzioShipper.log(log);
-
   } catch (error) {
     await backupContainer.writeEventToBlob(log, error);
     backupContainer.updateFolderIfMaxSizeSurpassed();
