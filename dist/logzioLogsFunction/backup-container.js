@@ -102,7 +102,8 @@ class BackupContainer {
       `Failed to send a log to Logz.io due to the error: '${error}'.\n Uploading to backup container: '${this._containerClient._containerName}' in the file: '${this.currentFolder}\\${this.currentFile}'`
     );
     const eventWithNewLine = JSON.stringify(event).concat("\n");
-    const fileFullPath = `${this.currentFolder}//${this.currentFile}`;
+    const fileFullPath = `${this.currentFolder}\\${this.currentFile}`;
+    console.log(fileFullPath)
     try {
       await appendFileAsync(fileFullPath, eventWithNewLine);
       this._logsInBulk++;
