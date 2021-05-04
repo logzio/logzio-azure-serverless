@@ -142,5 +142,4 @@ module.exports = async function processEventHubMessages(context, eventHubs) {
   catch(error){
       context.log.error(error)
   }
-  backupContainer.deleteDirectoriesRecursively(context);
 };
