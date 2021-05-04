@@ -1,6 +1,8 @@
 const fs = require("fs");
 const util = require("util");
-const workingDir = "C:/local/Temp/";
+const workingDir = "C:\\local\\Temp\\";
+const root = process.cwd();
+
 const folderMaxSizeInMB = 10000;
 const maxShipperBulkSize = 100;
 const appendFileAsync = util.promisify(fs.appendFile);
@@ -65,13 +67,15 @@ class BackupContainer {
     }
   }
 
-  deleteDirectoriesRecursively() {
-        fs.readdir(workingDir, function(err, items) {
+  deleteDirectoriesRecursively(context) {
+        fs.readdir(root, function(err, items) {
+        context.log("About to delete all files in: ", root)
         for (var i=0; i<items.length; i++) {
             if (items[i].startsWith('2021')){
                 fs.rmdirSync(items[i], { recursive: true });
             }
         } 
+        context.log("Deleted successfully.")
     });
    }
 
