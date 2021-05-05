@@ -1,6 +1,8 @@
 const fs = require("fs");
 const util = require("util");
-const workingDir = process.cwd();
+const tempDir = "C:\\local\\Temp\\";
+const root = process.cwd();
+
 const folderMaxSizeInMB = 10000;
 const maxShipperBulkSize = 100;
 const appendFileAsync = util.promisify(fs.appendFile);
@@ -16,7 +18,6 @@ class BackupContainer {
     this._logsInBulk = 1;
     this._createNewFolder();
     this._createNewFile();
-    this._foldersToDelete = [this.currentFolder];
   }
 
   _updateFolderSize() {
@@ -40,7 +41,7 @@ class BackupContainer {
   }
 
   async _createNewFolder() {
-    const newFolderName = this._getDate() + "-" + this._uniqString();
+    const newFolderName = tempDir + this._getDate() + "-" + this._uniqString();
     fs.mkdir(newFolderName, { recursive: true }, err => {
       if (err) this._context.log.error(err);
     });
@@ -66,12 +67,17 @@ class BackupContainer {
     }
   }
 
-  deleteDirectoriesRecursively() {
-    this._foldersToDelete.forEach(folderPath => {
-      fs.rmdirSync(folderPath, { recursive: true });
+  deleteDirectoriesRecursively(tempDir, context) {
+        fs.readdir(tempDir, function(err, items) {
+        context.log("About to delete all files in: ", tempDir)
+        for (var i=0; i<items.length; i++) {
+            if (items[i] != 'logzioLogsFunction'){
+                fs.rmdirSync(items[i], { recursive: true });
+            }
+        } 
+        context.log("Deleted successfully.")
     });
-    this._foldersToDelete = [];
-  }
+   }
 
   async uploadFiles() {
     try {
@@ -91,21 +97,17 @@ class BackupContainer {
     }
   }
 
-  async writeEventToBlob(event, error) {
+  async writeEventToBlob(event, context, error) {
     this._context.log.error(
       `Failed to send a log to Logz.io due to the error: '${error}'.\n Uploading to backup container: '${this._containerClient._containerName}' in the file: '${this.currentFolder}\\${this.currentFile}'`
     );
     const eventWithNewLine = JSON.stringify(event).concat("\n");
-    const concatFolderToFile = `${this.currentFolder}/${this.currentFile}`;
-    const fileFullPath = `${workingDir}/${concatFolderToFile}`;
+    const fileFullPath = `${this.currentFolder}\\${this.currentFile}`;
     try {
       await appendFileAsync(fileFullPath, eventWithNewLine);
       this._logsInBulk++;
-      if (!this._filesToUpload.includes(concatFolderToFile)) {
-        this._filesToUpload.push(concatFolderToFile);
-      }
-      if (!this._foldersToDelete.includes(this.currentFolder)) {
-        this._foldersToDelete.push(this.currentFolder);
+      if (!this._filesToUpload.includes(fileFullPath)) {
+        this._filesToUpload.push(fileFullPath);
       }
     } 
     catch (error) {

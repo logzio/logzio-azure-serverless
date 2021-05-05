@@ -3,7 +3,7 @@ const logger = require("logzio-nodejs");
 const BackupContainer = require("./backup-container");
 const containerName = "logziologsbackupcontainer";
 const availableStatistics = ["count", "total", "average", "maximum", "minimum"];
-const addTimestampIfNotExists = log => {
+const addTimestamp = log => {
   if (log.time) {
     return {
       ...log,
@@ -77,22 +77,36 @@ const parseLogToMetric = obj => {
   return metricObj;
 };
 
-const buildLog = (eventHub, context) => {
-  let eventhubLog = {};
+const addDataToLog = (log, context) => {
+  let eventhubLog;
   try {
     if (process.env.ParseEmptyFields.toLowerCase() == "true") {
-      eventhubLog = deleteEmptyFieldsOfLog(eventHub);
+      eventhubLog = deleteEmptyFieldsOfLog(log);
     }
     if (process.env.DataType == "Metrics") {
-      eventhubLog = parseLogToMetric(eventHub);
+      eventhubLog = parseLogToMetric(log);
     } else {
-      eventhubLog = addTimestampIfNotExists(eventHub);
+      eventhubLog = addTimestamp(log);
     }
-  } catch (e) {
-    context.log.error(e);
+  } catch (error) {
+    context.log.error(error);
   }
-  return eventhubLog;
+  return eventhubLog || log;
 };
+
+
+const sendLog = async (log, logzioShipper, backupContainer, context) =>{
+  log = addDataToLog(log, context);
+  try {
+    logzioShipper.log(log);
+  } catch (error) {
+    await backupContainer.writeEventToBlob(log, error);
+    backupContainer.updateFolderIfMaxSizeSurpassed();
+    backupContainer.updateFileIfBulkSizeSurpassed();
+  } finally {
+    await backupContainer.uploadFiles();
+  }
+}
 
 module.exports = async function processEventHubMessages(context, eventHubs) {
   const callBackFunction = getCallBackFunction(context);
@@ -117,18 +131,15 @@ module.exports = async function processEventHubMessages(context, eventHubs) {
     internalLogger: context,
     containerClient: containerClient
   });
-  eventHubs[0].records.map(async eventHub => {
-    eventHub = buildLog(eventHub, context);
-    try {
-      logzioShipper.log(eventHub);
-    } catch (error) {
-      await backupContainer.writeEventToBlob(eventHub, error);
-      backupContainer.updateFolderIfMaxSizeSurpassed();
-      backupContainer.updateFileIfBulkSizeSurpassed();
-    } finally {
-      await backupContainer.uploadFiles();
-    }
-  });
-  await Promise.all(eventHubs[0].records);
-  logzioShipper.sendAndClose(callBackFunction);
+  try{
+      const eventHubArray = eventHubs[0].hasOwnProperty('records') ? eventHubs[0].records : eventHubs;
+      eventHubArray.map(async eventHub => {
+          sendLog(eventHub, logzioShipper, backupContainer, context);
+      });
+      await Promise.all(eventHubArray);
+      logzioShipper.sendAndClose(callBackFunction);
+  }
+  catch(error){
+      context.log.error(error)
+  }
 };
