@@ -1,6 +1,6 @@
 const fs = require("fs");
 const util = require("util");
-const workingDir = "C:\\local\\Temp\\";
+const tempDir = "C:\\local\\Temp\\";
 const root = process.cwd();
 
 const folderMaxSizeInMB = 10000;
@@ -41,7 +41,7 @@ class BackupContainer {
   }
 
   async _createNewFolder() {
-    const newFolderName = workingDir + this._getDate() + "-" + this._uniqString();
+    const newFolderName = tempDir + this._getDate() + "-" + this._uniqString();
     fs.mkdir(newFolderName, { recursive: true }, err => {
       if (err) this._context.log.error(err);
     });
@@ -67,11 +67,11 @@ class BackupContainer {
     }
   }
 
-  deleteDirectoriesRecursively(context) {
-        fs.readdir(root, function(err, items) {
-        context.log("About to delete all files in: ", root)
+  deleteDirectoriesRecursively(tempDir, context) {
+        fs.readdir(tempDir, function(err, items) {
+        context.log("About to delete all files in: ", tempDir)
         for (var i=0; i<items.length; i++) {
-            if (items[i].startsWith('2021')){
+            if (items[i] != 'logzioLogsFunction'){
                 fs.rmdirSync(items[i], { recursive: true });
             }
         } 
