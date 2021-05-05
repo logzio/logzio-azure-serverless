@@ -103,7 +103,6 @@ class BackupContainer {
     );
     const eventWithNewLine = JSON.stringify(event).concat("\n");
     const fileFullPath = `${this.currentFolder}\\${this.currentFile}`;
-    console.log(fileFullPath)
     try {
       await appendFileAsync(fileFullPath, eventWithNewLine);
       this._logsInBulk++;
