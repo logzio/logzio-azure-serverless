@@ -46,7 +46,7 @@
         "logsFunctionAppName": "[concat('logzioMFunctionApp', uniqueString(resourceGroup().id))]",
         "backupStorageAccounts": "[concat('logsmbackup', uniqueString(resourceGroup().id))]",
         "repoURL": "https://github.com/logzio/logzio-azure-serverless.git",
-        "branch": "master",
+        "branch": "support-inner-event",
         "DataType": "Metrics",
         "ParseEmptyFields": "false"
     },
