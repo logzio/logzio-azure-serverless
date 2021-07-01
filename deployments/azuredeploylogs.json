@@ -191,10 +191,6 @@
                             "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('logzioAppStorageAccounts'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('logzioAppStorageAccounts')),'2019-06-01').keys[0].value)]"
                         },
                         {
-                            "name": "AzureWebJobsDashboard",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', parameters('logzioAppStorageAccounts'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('logzioAppStorageAccounts')),'2019-06-01').keys[0].value)]"
-                        },
-                        {
                             "name": "AzureEventHubLogsConnectionString",
                             "value": "[listkeys(resourceId('Microsoft.EventHub/namespaces/authorizationRules', parameters('EventhubNamespace'), parameters('AuthorizationRulesSharedAccessKey')), '2017-04-01').primaryConnectionString]"
                         },
