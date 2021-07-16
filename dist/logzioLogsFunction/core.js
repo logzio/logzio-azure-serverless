@@ -134,15 +134,7 @@ module.exports = async function processEventHubMessages(context, eventHubs) {
   try{
       const eventHubArray = eventHubs[0].hasOwnProperty('records') ? eventHubs[0].records : eventHubs;
       eventHubArray.map(async eventHub => {
-        if (eventHub.hasOwnProperty('records')){
-          eventHub.records.map(async innerEventHub => {
-            sendLog(innerEventHub, logzioShipper, backupContainer, context);
-          })
-          await Promise.all(eventHub);
-        }
-        else{
           sendLog(eventHub, logzioShipper, backupContainer, context);
-        }
       });
       await Promise.all(eventHubArray);
       logzioShipper.sendAndClose(callBackFunction);
