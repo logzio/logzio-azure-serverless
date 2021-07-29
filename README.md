@@ -3,6 +3,9 @@
 This repo contains the code and instructions you'll need to ship logs and metrics from your Azure services to Logz.io.
 At the end of this process, your Azure function will forward logs or metrics from an Azure Event Hub to your Logz.io account.
 
+**Note: The metrics solution is deprecated and only works with the elastic-based Logz.io metrics product.*
+
+
 ![Integration-architecture](img/logzio-evethub-Diagram.png)
 
 ## Setting log shipping from Azure
@@ -10,7 +13,7 @@ At the end of this process, your Azure function will forward logs or metrics fro
 ### 1. Deploy the Logz.io template👇 
 
 
-| Logs | Metrics |
+| Logs | Metrics* |
 |---|---|
 | [![Deploy to Azure](https://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Flogzio%2Flogzio-azure-serverless%2Fmaster%2Fdeployments%2Fazuredeploylogs.json) | [![Deploy to Azure](https://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Flogzio%2Flogzio-azure-serverless%2Fmaster%2Fdeployments%2Fazuredeploymetrics.json) |
 
