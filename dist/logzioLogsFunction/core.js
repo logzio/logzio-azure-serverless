@@ -1,6 +1,6 @@
 const { ContainerClient } = require("@azure/storage-blob");
-const logger = require("logzio-nodejs");
-const BackupContainer = require("./backup-container");
+const logger = require('logzio-nodejs');
+const BackupContainer = require('./backup-container');
 const containerName = "logziologsbackupcontainer";
 const availableStatistics = ["count", "total", "average", "maximum", "minimum"];
 const addTimestamp = log => {
@@ -97,6 +97,8 @@ const addDataToLog = (log, context) => {
 
 const sendLog = async (log, logzioShipper, backupContainer, context) =>{
   log = addDataToLog(log, context);
+  context.log("log structure:")
+  context.log(JSON.stringify(log));
   try {
     logzioShipper.log(log);
   } catch (error) {
@@ -135,13 +137,14 @@ module.exports = async function processEventHubMessages(context, eventHubs) {
       const eventHubArray = eventHubs[0].hasOwnProperty('records') ? eventHubs[0].records : eventHubs;
       eventHubArray.map(async eventHub => {
         if (eventHub.hasOwnProperty('records')){
+          context.log("Inner eventhub detected")
           eventHub.records.map(async innerEventHub => {
-            sendLog(innerEventHub, logzioShipper, backupContainer, context);
+            await sendLog(innerEventHub, logzioShipper, backupContainer, context);
           })
           await Promise.all(eventHub);
         }
         else{
-          sendLog(eventHub, logzioShipper, backupContainer, context);
+          await sendLog(eventHub, logzioShipper, backupContainer, context);
         }
       });
       await Promise.all(eventHubArray);
