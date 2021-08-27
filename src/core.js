@@ -1,4 +1,4 @@
-const logger = require('logzio-nodejs');
+const logger = require('yotam-nodejs');
 const DataParser = require('./data-parser');
 
 function getCallBackFunction(context) {
