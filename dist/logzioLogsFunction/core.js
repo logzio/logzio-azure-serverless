@@ -1,5 +1,5 @@
 const { ContainerClient } = require("@azure/storage-blob");
-const logger = require('logzio-nodejs');
+const logger = require('yotam-nodejs');
 const BackupContainer = require('./backup-container');
 const containerName = "logziologsbackupcontainer";
 const availableStatistics = ["count", "total", "average", "maximum", "minimum"];
@@ -97,8 +97,7 @@ const addDataToLog = (log, context) => {
 
 const sendLog = async (log, logzioShipper, backupContainer, context) =>{
   log = addDataToLog(log, context);
-  context.log("log structure:")
-  context.log(JSON.stringify(log));
+  context.log(`log structure: ${JSON.stringify(log)}`);
   try {
     logzioShipper.log(log);
   } catch (error) {
@@ -121,36 +120,38 @@ module.exports = async function processEventHubMessages(context, eventHubs) {
     internalLogger: context,
     compress: true,
     debug: true,
+    verbose: true,
     callback: callBackFunction,
     bufferSize: bufferSize || 100
   });
   const { storageConnectionString, containerName } = getContainerDetails();
   const containerClient = new ContainerClient(
-    storageConnectionString,
-    containerName
+      storageConnectionString,
+      containerName
   );
   const backupContainer = new BackupContainer({
     internalLogger: context,
     containerClient: containerClient
   });
   try{
-      const eventHubArray = eventHubs[0].hasOwnProperty('records') ? eventHubs[0].records : eventHubs;
-      eventHubArray.map(async eventHub => {
-        if (eventHub.hasOwnProperty('records')){
-          context.log("Inner eventhub detected")
-          eventHub.records.map(async innerEventHub => {
-            await sendLog(innerEventHub, logzioShipper, backupContainer, context);
-          })
-          await Promise.all(eventHub);
-        }
-        else{
-          await sendLog(eventHub, logzioShipper, backupContainer, context);
-        }
-      });
-      await Promise.all(eventHubArray);
-      logzioShipper.sendAndClose(callBackFunction);
+    const eventHubArray = eventHubs[0].hasOwnProperty('records') ? eventHubs[0].records : eventHubs;
+    context.log(`Eventhub records contains ${eventHubArray.length} events: ${JSON.stringify(eventHubArray)}`)
+    eventHubArray.map(async eventHub => {
+      if (eventHub.hasOwnProperty('records')){
+        context.log(`Inner eventhub detected, actuall number of events is ${eventHubArray.length + eventHub.records.length}`)
+        eventHub.records.map(async innerEventHub => {
+          await sendLog(innerEventHub, logzioShipper, backupContainer, context);
+        })
+        await Promise.all(eventHub);
+      }
+      else{
+        await sendLog(eventHub, logzioShipper, backupContainer, context);
+      }
+    });
+    await Promise.all(eventHubArray);
+    logzioShipper.sendAndClose(callBackFunction);
   }
   catch(error){
-      context.log.error(error)
+    context.log.error(error)
   }
 };
