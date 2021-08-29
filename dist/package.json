@@ -13,6 +13,6 @@
   "license": "ISC",
   "dependencies": {
     "@azure/storage-blob": "^12.2.1",
-    "yotam-nodejs": "^2.0.3-beta"
+    "logzio-nodejs": "^2.0.3-beta"
   }
 }
