@@ -282,14 +282,8 @@
             "scale": null,
             "properties": {
                 "messageRetentionInDays": 7,
-                "partitionCount": 10,
-                "status": "Active",
-                "partitionIds": [
-                    "0",
-                    "1",
-                    "2",
-                    "3"
-                ]
+                "partitionCount": 32,
+                "status": "Active"
             },
             "dependsOn": [
                 "[resourceId('Microsoft.EventHub/namespaces', parameters('EventhubNamespace'))]"
