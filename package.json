@@ -30,7 +30,7 @@
   "dependencies": {
     "acorn": "^8.0.4",
     "jest": "^25.0.0",
-    "logzio-nodejs": "^2.0.3-beta",
+    "logzio-nodejs": "^2.0.2-beta2",
     "nock": "10.0.6"
   },
   "devDependencies": {
