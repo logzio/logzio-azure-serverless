@@ -131,7 +131,7 @@ module.exports = async function processEventHubMessages(context, eventHubs) {
     protocol: "https",
     internalLogger: context,
     compress: true,
-    debug: true,
+    debug: debug,
     callback: callBackFunction,
     bufferSize: bufferSize || 100
   });
