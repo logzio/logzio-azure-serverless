@@ -1,8 +1,8 @@
 const { ContainerClient } = require("@azure/storage-blob");
-const logger = require("logzio-nodejs");
-const BackupContainer = require("./backup-container");
+const logger = require('logzio-nodejs');
+const BackupContainer = require('./backup-container');
 const containerName = "logziologsbackupcontainer";
-const availableStatistics = ["count", "total", "average", "maximum", "minimum"];
+
 const addTimestamp = log => {
   if (log.time) {
     return {
@@ -13,8 +13,17 @@ const addTimestamp = log => {
   return log;
 };
 
+
+const isIterable = (obj) => {
+  // checks for null and undefined
+  if (obj == null) {
+    return false;
+  }
+  return typeof obj[Symbol.iterator] === 'function';
+}
+
 const isObject = obj => {
-  return obj !== undefined && obj !== null && obj.constructor == Object;
+  return obj !== undefined && obj !== null && obj.constructor === Object;
 };
 
 const deleteEmptyFieldsOfLog = obj => {
@@ -42,7 +51,8 @@ const getCallBackFunction = context => {
 const getParserOptions = () => ({
   token: process.env.LogzioLogsToken,
   host: process.env.LogzioLogsHost,
-  bufferSize: Number(process.env.BufferSize)
+  bufferSize: Number(process.env.BufferSize),
+  debug: process.env.Debug,
 });
 
 const getContainerDetails = () => ({
@@ -50,44 +60,14 @@ const getContainerDetails = () => ({
   containerName: containerName
 });
 
-const parseLogToMetric = obj => {
-  const { metricName } = obj;
-  if (!metricName) return obj;
-
-  const metricObj = {
-    metrics: {
-      [metricName]: {}
-    },
-    dimensions: {}
-  };
-  Object.keys(obj).forEach(key => {
-    if (availableStatistics.includes(key)) {
-      metricObj.metrics[metricName][key] = obj[key];
-    } else if (key === "resourceId") {
-      const splitArr = obj[key].split("/");
-      for (let i = 1; i < splitArr.length; i += 2) {
-        metricObj.dimensions[splitArr[i]] = splitArr[i + 1];
-      }
-    } else if (key === "@timestamp") {
-      metricObj[key] = obj[key];
-    } else if (key !== "metricName") {
-      metricObj.dimensions[key] = obj[key];
-    }
-  });
-  return metricObj;
-};
 
 const addDataToLog = (log, context) => {
   let eventhubLog;
   try {
-    if (process.env.ParseEmptyFields.toLowerCase() == "true") {
+    if (process.env.ParseEmptyFields.toLowerCase() === "true") {
       eventhubLog = deleteEmptyFieldsOfLog(log);
     }
-    if (process.env.DataType == "Metrics") {
-      eventhubLog = parseLogToMetric(log);
-    } else {
-      eventhubLog = addTimestamp(log);
-    }
+    eventhubLog = addTimestamp(log);
   } catch (error) {
     context.log.error(error);
   }
@@ -106,11 +86,44 @@ const sendLog = async (log, logzioShipper, backupContainer, context) =>{
   } finally {
     await backupContainer.uploadFiles();
   }
+  return true;
 }
+
+const exportLogs = async (eventHubs, logzioShipper, backupContainer, context) => {
+  try {
+    let calls = [];
+    eventHubs.map(message => {
+      let events = message.hasOwnProperty('records') ? message.records : message;
+      if (isIterable(events)){
+        events.map(log => {
+          if (log.hasOwnProperty('records')) {
+            if (isIterable(log.records)){
+              log.records.map( innerEvent => {
+                calls.push(sendLog(innerEvent, logzioShipper, backupContainer, context));
+              });
+            };
+          } else {
+            calls.push(sendLog(log, logzioShipper, backupContainer, context));
+          }
+        });
+      } else {
+        calls.push(sendLog(events, logzioShipper, backupContainer, context));
+      }
+    });
+    await Promise.all(calls);
+  }
+  catch (error){
+    context.log(error)
+  };
+  return true;
+};
 
 module.exports = async function processEventHubMessages(context, eventHubs) {
   const callBackFunction = getCallBackFunction(context);
-  const { host, token, bufferSize } = getParserOptions();
+  const { host, token, bufferSize, debug } = getParserOptions();
+  if (debug === 'true'){
+    context.log(`Messages: ${JSON.stringify(eventHubs)}`);
+  }
   const logzioShipper = logger.createLogger({
     token,
     host,
@@ -124,30 +137,19 @@ module.exports = async function processEventHubMessages(context, eventHubs) {
   });
   const { storageConnectionString, containerName } = getContainerDetails();
   const containerClient = new ContainerClient(
-    storageConnectionString,
-    containerName
+      storageConnectionString,
+      containerName
   );
   const backupContainer = new BackupContainer({
     internalLogger: context,
     containerClient: containerClient
   });
   try{
-      const eventHubArray = eventHubs[0].hasOwnProperty('records') ? eventHubs[0].records : eventHubs;
-      eventHubArray.map(async eventHub => {
-        if (eventHub.hasOwnProperty('records')){
-          eventHub.records.map(async innerEventHub => {
-            sendLog(innerEventHub, logzioShipper, backupContainer, context);
-          })
-          await Promise.all(eventHub);
-        }
-        else{
-          sendLog(eventHub, logzioShipper, backupContainer, context);
-        }
-      });
-      await Promise.all(eventHubArray);
+    exportLogs(eventHubs, logzioShipper, backupContainer, context).then(() => {
       logzioShipper.sendAndClose(callBackFunction);
+    });
   }
   catch(error){
-      context.log.error(error)
+    context.log.error(error)
   }
 };

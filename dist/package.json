@@ -1,6 +1,6 @@
 {
   "name": "logzio-logs-function",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "This package will collect logs from eventhub and send them to Logz.io",
   "main": "index.js",
   "scripts": {
@@ -13,6 +13,6 @@
   "license": "ISC",
   "dependencies": {
     "@azure/storage-blob": "^12.2.1",
-    "logzio-nodejs": "^2.0.2"
+    "logzio-nodejs": "^2.0.3"
   }
 }

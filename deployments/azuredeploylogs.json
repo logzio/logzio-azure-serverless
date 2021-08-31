@@ -13,6 +13,10 @@
             "defaultValue": 100,
             "type": "int"
         },
+        "Debug": {
+            "defaultValue": false,
+            "type": "bool"
+        },
         "EventhubNamespace": {
             "defaultValue": "[concat('LogzioLNS', uniqueString(resourceGroup().id))]",
             "type": "string"
@@ -42,7 +46,7 @@
             "type": "string"
         }
     },
-    "variables": {  
+    "variables": {
         "logsFunctionAppName": "[concat('logzioLFunctionApp', uniqueString(resourceGroup().id))]",
         "backupStorageAccounts": "[concat('logslbackup', uniqueString(resourceGroup().id))]",
         "repoURL": "https://github.com/logzio/logzio-azure-serverless.git",
@@ -181,7 +185,7 @@
                         {
                             "name": "WEBSITE_CONTENTSHARE",
                             "value": "[toLower(variables('logsFunctionAppName'))]"
-                        }, 
+                        },
                         {
                             "name": "Project",
                             "value": "dist/"
@@ -209,6 +213,10 @@
                         {
                             "name": "LogzioLogsToken",
                             "value": "[parameters('LogsShippingToken')]"
+                        },
+                        {
+                            "name": "Debug",
+                            "value": "[parameters('Debug')]"
                         },
                         {
                             "name": "LogzioLogsHost",
@@ -282,14 +290,8 @@
             "scale": null,
             "properties": {
                 "messageRetentionInDays": 7,
-                "partitionCount": 10,
-                "status": "Active",
-                "partitionIds": [
-                    "0",
-                    "1",
-                    "2",
-                    "3"
-                ]
+                "partitionCount": 32,
+                "status": "Active"
             },
             "dependsOn": [
                 "[resourceId('Microsoft.EventHub/namespaces', parameters('EventhubNamespace'))]"

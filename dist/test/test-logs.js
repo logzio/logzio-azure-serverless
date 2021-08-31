@@ -5,6 +5,23 @@ const simpleJsonLog = JSON.stringify({
   k2: 'v2',
 });
 
+const singleLog = {"k1":"v1"}
+const logArray = [
+  {"k1":"v1"},
+  {"k2":"v2"}
+]
+
+const nested = {
+  "records": [
+    {"k1":"v1"},
+    {"k2":"v2"},
+    {"records":[
+        {"k3":"v3"}
+      ]
+    }
+  ]
+}
+
 const auditLogs = {
   records: [{
     time: '2018-12-03T10:00:30.0910703Z',
@@ -99,5 +116,8 @@ module.exports = {
   simpleStringLog,
   simpleJsonLog,
   auditLogs,
+  singleLog,
+  logArray,
+  nested,
   networkSecurityGroupRuleCounterLogs,
 };
