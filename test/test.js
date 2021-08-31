@@ -1,5 +1,5 @@
 const nock = require('nock');
-const testLogs = require('./test-logs');
+const testLogs = require('../dist/test/test-logs');
 const testMetrics = require('./test-metrics');
 const DataParser = require('../src/data-parser');
 const logsFunction = require('../src/logs-index');
