@@ -51,7 +51,7 @@ const getCallBackFunction = context => {
 const getParserOptions = () => ({
   token: process.env.LogzioLogsToken,
   host: process.env.LogzioLogsHost,
-  bufferSize: Number(process.env.BufferSize)
+  bufferSize: Number(process.env.BufferSize),
   debug: process.env.Debug,
 });
 
@@ -119,11 +119,11 @@ const exportLogs = async (eventHubs, logzioShipper, backupContainer, context) =>
 };
 
 module.exports = async function processEventHubMessages(context, eventHubs) {
-  if (debug){
-    context.log(`Messages: ${eventHubs}`);
-  }
   const callBackFunction = getCallBackFunction(context);
   const { host, token, bufferSize, debug } = getParserOptions();
+  if (debug === 'true'){
+    context.log(`Messages: ${JSON.stringify(eventHubs)}`);
+  }
   const logzioShipper = logger.createLogger({
     token,
     host,
@@ -131,7 +131,7 @@ module.exports = async function processEventHubMessages(context, eventHubs) {
     protocol: "https",
     internalLogger: context,
     compress: true,
-    debug: debug,
+    debug: true,
     callback: callBackFunction,
     bufferSize: bufferSize || 100
   });
