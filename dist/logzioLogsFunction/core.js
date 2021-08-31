@@ -118,6 +118,7 @@ const exportLogs = async (eventHubs, logzioShipper, backupContainer, context) =>
 };
 
 module.exports = async function processEventHubMessages(context, eventHubs) {
+  context.log(`Messages: ${eventHubs}`)
   const callBackFunction = getCallBackFunction(context);
   const { host, token, bufferSize } = getParserOptions();
   const logzioShipper = logger.createLogger({
