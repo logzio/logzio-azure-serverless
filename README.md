@@ -34,6 +34,7 @@ Make sure to use these settings:
 |---|---|
 | Resource group* | Create a new resource group or select your existing one, and then click **OK**. |
 | Region* | Select the same region as the Azure services that will stream data to this event hub. |
+| Debug* | Add debug logs to your function app. |
 | Shipping token* | Add the [logs shipping token](https://app.logz.io/#/dashboard/settings/general) or [metrics shipping token](https://docs.logz.io/user-guide/accounts/finding-your-metrics-account-token/) for the relevant Logz.io account. This is the account you want to ship to.  |
 | Logs listener host* (Default: `listener.logz.io`)| Use the listener URL specific to the region of your Logz.io account. You can look it up [here](https://docs.logz.io/user-guide/accounts/account-region.html). |
 | buffersize (Default: 100) | The maximum number of messages the logger will accumulate before sending them all as a bulk  |
@@ -56,24 +57,7 @@ For more information see [Stream Azure monitoring data to an event hub for consu
 
 ![Diagnostic-settings](img/diagnostic-settings.png)
 
-### 4. For metrics data only - Building rollups config
-
-**Contact support to request a custom rollups config.**  
-Your Metrics account offers 18 month retention, by default. This is to allow you to establish your baseline and make comparisons over a substantial time frame.
-
-Data rollups are used to compress the data without losing the original extremes. The original max, min, and average values are kept so you can graph the data more accurately despite its compression. For more information and the list of default configs, see Rollups.
-
-To kick off this process, email Support to request a custom rollups config,
-help@logz.io.
-
-Include the following details in your message:
-
-Your Logz.io Metrics account ID or token.
-At least 5 sample JSONs of your custom metrics.
-If you are sending multiple metricsets, add descriptions to clarify which dimensions are associated with each metricset.
-Configuring the rollups for your custom metrics is included in your package and we’re happy to offer it!
-
-### 5. Check Logz.io for your data
+### 4. Check Logz.io for your data
 
 Give your data some time to get from your system to ours, and then open Logz.io.
 If everything went according to plan, you should see logs with the type `eventHub` in Kibana, or metrics with the type `eventHub` in Grafana.
@@ -95,6 +79,7 @@ You'll have the option to edit the following values:
 </div>
 
 ## Changelog
+- 2.0.2: Handle diagnostic logs, custom array of logs, custom single log.
 - 2.0.1: Dynacamic parameters of 'function.json'.
 - 2.0.0: Update function app version 3.x (Node 12).
     * Back up container for failures.
