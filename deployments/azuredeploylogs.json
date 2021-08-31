@@ -13,6 +13,10 @@
             "defaultValue": 100,
             "type": "int"
         },
+        "Debug": {
+            "defaultValue": false,
+            "type": "bool"
+        },
         "EventhubNamespace": {
             "defaultValue": "[concat('LogzioLNS', uniqueString(resourceGroup().id))]",
             "type": "string"
@@ -209,6 +213,10 @@
                         {
                             "name": "LogzioLogsToken",
                             "value": "[parameters('LogsShippingToken')]"
+                        },
+                        {
+                            "name": "Debug",
+                            "value": "[parameters('Debug')]"
                         },
                         {
                             "name": "LogzioLogsHost",
