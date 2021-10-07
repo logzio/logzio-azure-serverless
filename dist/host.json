@@ -1,17 +1,20 @@
 {
-    "functionTimeout": "00:02:00",
-    "version": "2.0",
-    "extensionBundle": {
-      "id": "Microsoft.Azure.Functions.ExtensionBundle",
-      "version": "[2.*, 3.0.0)"
-    },
-    "eventHub": {
+  "functionTimeout": "00:02:00",
+  "version": "2.0",
+  "extensionBundle": {
+    "id": "Microsoft.Azure.Functions.ExtensionBundle",
+    "version": "[2.*, 3.0.0)"
+  },
+  "extensions": {
+    "eventHubs": {
+      "batchCheckpointFrequency": 1,
+      "eventProcessorOptions": {
         "maxBatchSize": 64,
-        "prefetchCount": 256,
-        "batchCheckpointFrequency": 1
-    },
-    "functions": [
-        "logzioLogsFunction"
-    ]
-  }
-  
+        "prefetchCount": 256
+      }
+    }
+  },
+  "functions": [
+    "logzioLogsFunction"
+  ]
+}
