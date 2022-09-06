@@ -176,7 +176,7 @@
                         },
                         {
                             "name": "FUNCTIONS_WORKER_PROCESS_COUNT",
-                            "value": "10"
+                            "value": "1"
                         },
                         {
                             "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
