@@ -1,6 +1,7 @@
 const fs = require("fs");
 const util = require("util");
-const tempDir = "C:\\local\\Temp\\";
+const os = require("os");
+const tempDir = os.tmpdir();
 const root = process.cwd();
 
 const folderMaxSizeInMB = 10000;
@@ -68,16 +69,16 @@ class BackupContainer {
   }
 
   deleteDirectoriesRecursively(tempDir, context) {
-        fs.readdir(tempDir, function(err, items) {
-        context.log("About to delete all files in: ", tempDir)
-        for (var i=0; i<items.length; i++) {
-            if (items[i] != 'logzioLogsFunction'){
-                fs.rmdirSync(items[i], { recursive: true });
-            }
-        } 
-        context.log("Deleted successfully.")
+    fs.readdir(tempDir, function (err, items) {
+      context.log("About to delete all files in: ", tempDir)
+      for (var i = 0; i < items.length; i++) {
+        if (items[i] != 'logzioLogsFunction') {
+          fs.rmdirSync(items[i], { recursive: true });
+        }
+      }
+      context.log("Deleted successfully.")
     });
-   }
+  }
 
   async uploadFiles() {
     try {
@@ -109,7 +110,7 @@ class BackupContainer {
       if (!this._filesToUpload.includes(fileFullPath)) {
         this._filesToUpload.push(fileFullPath);
       }
-    } 
+    }
     catch (error) {
       this._context.log.error(`Error was thrown in appendFile, ${error}`);
     }
