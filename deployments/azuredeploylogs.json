@@ -44,6 +44,12 @@
         "AppInsightsName": {
             "defaultValue":"[concat('logzioLInsight', uniqueString(resourceGroup().id))]",
             "type": "string"
+        },
+        "functionsWorkerProcessCount": {
+            "defaultValue": 10,
+            "type": "int",
+            "minValue": 1,
+            "maxValue": 10
         }
     },
     "variables": {
@@ -176,7 +182,7 @@
                         },
                         {
                             "name": "FUNCTIONS_WORKER_PROCESS_COUNT",
-                            "value": "10"
+                            "value": "[parameters('functionsWorkerProcessCount')]"
                         },
                         {
                             "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",

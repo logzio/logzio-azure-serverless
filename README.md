@@ -79,6 +79,10 @@ You'll have the option to edit the following values:
 </div>
 
 ## Changelog
+- 2.0.4:
+    * Update extension bundle -> [3.3.0, 4.0.0), contribution of @EmFl.
+    * Change static temp directory, contribution of @EmFl.
+    * Add `functionsWorkerProcessCount` Parameter
 - 2.0.3: Update host.json version 1.x -> 2.x, contribution of @EmFI.
 - 2.0.2: Handle diagnostic logs, custom array of logs, custom single log.
 - 2.0.1: Dynacamic parameters of 'function.json'.
