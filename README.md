@@ -1,9 +1,8 @@
-
 # logzio-azure-serverless
 This repo contains the code and instructions you'll need to ship logs and metrics from your Azure services to Logz.io.
 At the end of this process, your Azure function will forward logs or metrics from an Azure Event Hub to your Logz.io account.
 
-**Note: The metrics solution is deprecated and only works with the elastic-based Logz.io metrics product.*
+**Note: The metrics solution is deprecated and only works with the elastic-based Logz.io metrics product.**
 
 
 ![Integration-architecture](img/logzio-evethub-Diagram.png)
@@ -12,10 +11,7 @@ At the end of this process, your Azure function will forward logs or metrics fro
 
 ### 1. Deploy the Logz.io template👇 
 
-
-| Logs | Metrics* |
-|---|---|
-| [![Deploy to Azure](https://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Flogzio%2Flogzio-azure-serverless%2Fmaster%2Fdeployments%2Fazuredeploylogs.json) | [![Deploy to Azure](https://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Flogzio%2Flogzio-azure-serverless%2Fmaster%2Fdeployments%2Fazuredeploymetrics.json) |
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Flogzio%2Flogzio-azure-serverless%2Fmaster%2Fdeployments%2Fazuredeploylogs.json)
 
 This deployment will create the following services:
 * Serveless Function App
@@ -76,9 +72,11 @@ You'll have the option to edit the following values:
 
 ![Function's configuration](img/configuration-settings.png)
 
-</div>
 
 ## Changelog
+- 2.0.5:
+  * Update `FUNCTIONS_EXTENSION_VERSION`: `~3` -> `~4`
+  * Update NodeJS `12` -> `16`
 - 2.0.4:
     * Update extension bundle -> [3.3.0, 4.0.0), contribution of @EmFl.
     * Change static temp directory, contribution of @EmFl.
