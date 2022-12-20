@@ -74,6 +74,9 @@ You'll have the option to edit the following values:
 
 
 ## Changelog
+- 2.0.6:
+- Update `@azure/storage-blob` -> 12.12.0
+- Update `extensionBundle` version `[3.3.0, 4.0.0)` -> `[4.0.0, 5.0.0)`
 - 2.0.5:
   * Update `FUNCTIONS_EXTENSION_VERSION`: `~3` -> `~4`
   * Update NodeJS `12` -> `16`
