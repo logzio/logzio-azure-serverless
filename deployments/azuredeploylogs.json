@@ -46,7 +46,7 @@
             "type": "string"
         },
         "functionsWorkerProcessCount": {
-            "defaultValue": 10,
+            "defaultValue": 1,
             "type": "int",
             "minValue": 1,
             "maxValue": 10
