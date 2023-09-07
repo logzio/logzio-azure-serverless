@@ -72,8 +72,9 @@ You'll have the option to edit the following values:
 
 ![Function's configuration](img/configuration-settings.png)
 
-
 ## Changelog
+- 2.0.8:
+  * Update node version 16 -> 18
 - 2.0.7:
   * Update `FUNCTIONS_WORKER_PROCESS_COUNT` default value -> 1
 - 2.0.6:
