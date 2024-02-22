@@ -29,6 +29,10 @@
             "defaultValue":"LogzioLConsumerGroup",
             "type": "string"
         },
+		"LogAnalyticsWorkspaceName": {
+			"defaultValue":"[concat('logzioWorkspace', uniqueString(resourceGroup().id))]",
+            "type": "string"
+		},
         "FunctionServerfarms": {
             "defaultValue": "[concat('logzioLAppServicePlan', uniqueString(resourceGroup().id))]",
             "type": "string"
@@ -326,15 +330,30 @@
                 "publicAccess": "None"
             }
         },
+		{
+			"type": "Microsoft.OperationalInsights/workspaces",
+			"apiVersion": "2021-12-01-preview",
+			"name": "[parameters('LogAnalyticsWorkspaceName')]",
+			"location": "[resourceGroup().location]",
+			"properties": {
+				"sku": {
+				  "name": "PerGB2018"
+				}
+			}
+		},
         {
             "name": "[parameters('AppInsightsName')]",
             "type": "Microsoft.Insights/components",
-            "apiVersion": "2020-02-02-preview",
+            "apiVersion": "2020-02-02",
             "location": "[resourceGroup().location]",
             "kind": "web",
+			"dependsOn": [
+				"[resourceId('Microsoft.OperationalInsights/workspaces', parameters('LogAnalyticsWorkspaceName'))]"
+			],
             "properties": {
               "Application_Type": "web",
-             "applicationId": "[parameters('AppInsightsName')]"
+              "applicationId": "[parameters('AppInsightsName')]",
+			  "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('LogAnalyticsWorkspaceName'))]"
             }
         }
     ]
