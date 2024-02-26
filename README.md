@@ -72,7 +72,20 @@ You'll have the option to edit the following values:
 
 ![Function's configuration](img/configuration-settings.png)
 
+### Migration to Log Analytics Workspace-Based Model
+
+For users currently on the Classic Application Insights, it's essential to migrate to the Log Analytics workspace-based model. To do this:
+
+1. Navigate to your Application Insights resource that hasn't been migrated yet.
+2. Click on the notification that states "Classic Application Insights is deprecated."
+3. A "Migrate to Workspace-based" dialog will appear. Here, confirm your preferred Log Analytics Workspace and click 'Apply'.
+
+**Important**: Be aware that once you migrate to a workspace-based model, the process cannot be reversed.
+
 ## Changelog
+- 2.1.0:
+  * Initiating a migration from Classic Application Insights to Log Analytics Workspace.
+  * Adding a Log Analytics Workspace resource to our ARM Template.
 - 2.0.8:
   * Update node version 16 -> 18
 - 2.0.7:
