@@ -83,6 +83,13 @@ For users currently on the Classic Application Insights, it's essential to migra
 **Important**: Be aware that once you migrate to a workspace-based model, the process cannot be reversed.
 
 ## Changelog
+- 2.1.1:
+  * Update NodeJS version `18` -> `20`
+  * Update dependencies versions
+    * Update `acorn` version `8.0.4` -> `8.14.0`
+    * Update `jest` version `25.0.0` -> `29.7.0`
+    * Update `logzio-nodejs` version `2.0.3` -> `2.2.0`
+    * Update `nock` version `10.0.6` -> `14.0.1`
 - 2.1.0:
   * Initiating a migration from Classic Application Insights to Log Analytics Workspace.
   * Adding a Log Analytics Workspace resource to our ARM Template.
