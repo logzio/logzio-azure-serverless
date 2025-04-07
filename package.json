@@ -31,7 +31,7 @@
     "acorn": "^8.0.4",
     "jest": "^25.0.0",
     "logzio-nodejs": "^2.0.3",
-    "nock": "10.0.6"
+    "nock": "14.0.3"
   },
   "devDependencies": {
     "eslint": "^5.16.0",
