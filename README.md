@@ -1,3 +1,5 @@
+This integration is deprecated and will not receive any further updates. The new integration is available at [azure-serverless](https://github.com/logzio/azure-serverless).
+
 # logzio-azure-serverless
 This repo contains the code and instructions you'll need to ship logs and metrics from your Azure services to Logz.io.
 At the end of this process, your Azure function will forward logs or metrics from an Azure Event Hub to your Logz.io account.
